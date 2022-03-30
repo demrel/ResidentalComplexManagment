@@ -1,0 +1,29 @@
+﻿using Ardalis.Specification;
+using ResidentalComplexManagment.Application.Models;
+using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ResidentalComplexManagment.Application.Specifications
+{
+    public  class MTKSpecifiaction : Specification<MKT,MTKDTo>
+    {
+        public MTKSpecifiaction()
+        {
+            Query.Select(x => new MTKDTo
+            {
+                Id = x.Id,
+                Name =x.Name,
+                IBAN = x.IBAN,
+                Address =x.Address,
+                PhoneNumber=x.PhoneNumber
+            });
+              
+        }
+
+
+    }
+}
