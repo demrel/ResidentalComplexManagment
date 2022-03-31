@@ -51,9 +51,6 @@ namespace ResidentalComplexManagment.Application.Services
 
        // public async Task<List<Resident>> Residents() =>
 
-        public async Task AddNewResident()
-        {
-
-        }
+        
     }
 }

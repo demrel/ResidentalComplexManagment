@@ -1,0 +1,243 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f6fb;
+  font-family: 'Poppins', sans-serif;
+}
+
+.colorSecondary {
+  color: #c5c7cf;
+}
+
+.bgSecondary {
+  background-color: #f5f6fb;
+}
+
+.shadowBox {
+  -webkit-box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.15) !important;
+          box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.15) !important;
+}
+
+.border-radius-card {
+  border-radius: 6px !important;
+}
+
+.theadSize {
+  font-size: 12px;
+}
+
+thead {
+  font-size: 12px;
+}
+
+@media (max-width: 406px) {
+  .btn-toolbar div {
+    width: 100%;
+    margin: 20px 0;
+  }
+  #reportrange {
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .fontSize-15 {
+    font-size: 11px;
+  }
+  .fontSizeBlod {
+    font-size: 18px !important;
+  }
+  .sidebar a {
+    padding: 16px 5px !important;
+  }
+}
+
+@media (min-width: 1300px) {
+  .fontSize-15 {
+    font-size: 15px;
+  }
+  .fontSizeBlod {
+    font-size: 20px !important;
+  }
+}
+
+.navTop {
+  position: relative;
+  background-color: #fff;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.navTop .navTopFlex .navTopRight .navTopRightElement .notification {
+  position: relative;
+}
+
+.navTop .navTopFlex .navTopRight .navTopRightElement .notification .notificationNumber {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 10px;
+  background-color: #f51531;
+  color: #fff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  text-align: center;
+}
+
+.navTop .navTopFlex .navTopRight .navTopRightElement .navTopImg {
+  width: 40px;
+  height: 40px;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  background-color: #fff !important;
+  height: 100vh;
+  overflow: auto;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  float: left;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px !important;
+  text-decoration: none;
+}
+
+.sidebar a.active {
+  background-color: #f3f3fb;
+  color: #007bff;
+  max-width: 90%;
+  margin-bottom: 8px;
+  border-left: 4px solid;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #f3f3fb;
+  color: #007bff;
+  max-width: 90%;
+  border-left: 4px solid;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+@media only screen and (max-width: 767px) {
+  .sidebar {
+    margin: 0;
+    padding: 0;
+    background-color: #fff !important;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    top: 0;
+    float: unset;
+  }
+  .sidebar a.active {
+    max-width: 100%;
+  }
+  .sidebar a:hover:not(.active) {
+    max-width: 100%;
+  }
+}
+
+.bootstrap-select > .dropdown-toggle:after {
+  color: #007bff;
+}
+
+.bootstrap-select .btn:focus {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+th.dropdown-header > select {
+  background: inherit;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+th.dropdown-header > select:focus {
+  outline: none;
+}
+
+table > thead th,
+table > thead th > select {
+  font-family: Arial;
+  font-size: 1em;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 999px) {
+  .table {
+    border: 0;
+  }
+  .table caption {
+    font-size: 1.3em;
+  }
+  .table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+    background-color: #f5f6fb;
+    border-radius: 6px;
+  }
+  .table td {
+    border-bottom: 1px solid #000 !important;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  .table td::before {
+    /*
+      * aria-label has no advantage, it won't be read inside a table
+      content: attr(aria-label);
+      */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+  position: absolute;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+}
+/*# sourceMappingURL=style.css.map */

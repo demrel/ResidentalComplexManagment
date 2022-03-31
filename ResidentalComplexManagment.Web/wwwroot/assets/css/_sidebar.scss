@@ -1,0 +1,60 @@
+.sidebar {
+    margin: 0;
+    padding: 0;
+    background-color: $white-color !important;
+    height: 100vh;
+    overflow: auto;
+    position: sticky;
+    top: 0;
+    float: left;
+    a {
+        display: block;
+        color: black;
+        padding: 16px !important;
+        text-decoration: none;
+
+        &.active {
+            background-color: #f3f3fb;
+            color: $primaryText-color;
+            max-width: 90%;
+            margin-bottom: 8px;
+            border-left: 4px solid;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+    }
+
+    a:hover:not(.active) {
+        background-color: #f3f3fb;
+        color: $primaryText-color;
+        max-width: 90%;
+        border-left: 4px solid;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+}
+
+
+@media only screen and (max-width:767px){
+    .sidebar {
+        margin: 0;
+        padding: 0;
+        background-color: $white-color !important;
+        height: 100%;
+        overflow: auto;
+        position: relative;
+        top: 0;
+        float: unset;
+
+        a {
+          
+            &.active {
+                max-width: 100%;
+            }
+        }
+
+        a:hover:not(.active) {
+            max-width: 100%;
+        }
+    }
+}

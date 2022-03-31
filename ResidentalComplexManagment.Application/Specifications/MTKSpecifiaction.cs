@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Specifications
 {
-    public  class MTKSpecifiaction : Specification<MKT,MTKDTo>
+    internal  class MTKSpecifiaction : Specification<MKT,MTKDTo>
     {
         public MTKSpecifiaction()
         {

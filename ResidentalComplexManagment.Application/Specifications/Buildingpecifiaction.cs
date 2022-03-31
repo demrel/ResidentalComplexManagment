@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Specifications
 {
-    public  class Buildingpecifiaction : Specification<Building, BuildingDTO>
+    internal  class Buildingpecifiaction : Specification<Building, BuildingDTO>
     {
         public Buildingpecifiaction()
         {

@@ -28,7 +28,7 @@ namespace ResidentalComplexManagment.Core.Entities.Users
 
         }
 
-        public Resident(string name, string surname, string fIN, string phoneNumber, DateTime birthday)
+        public Resident(string name, string surname, string fIN, string phoneNumber, DateTime? birthday)
         {
             Guard.Against.NullOrEmpty(name, nameof(name));
             Guard.Against.NullOrEmpty(surname, nameof(surname));
@@ -43,7 +43,7 @@ namespace ResidentalComplexManagment.Core.Entities.Users
             Birthday = birthday;
             IsCurrentResident = true;
         }
-        public void UpdateDetails(string name, string surname, string fIN, string phoneNumber, DateTime birthday)
+        public void UpdateDetails(string name, string surname, string fIN, string phoneNumber, DateTime? birthday)
         {
             Guard.Against.NullOrEmpty(name, nameof(name));
             Guard.Against.NullOrEmpty(surname, nameof(surname));

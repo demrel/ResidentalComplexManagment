@@ -1,0 +1,26 @@
+.bootstrap-select>.dropdown-toggle:after{
+    color: #007bff;
+}
+
+.bootstrap-select .btn:focus {
+    outline: none !important;
+    box-shadow:none !important
+}
+
+
+
+th.dropdown-header > select {
+    background: inherit;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  th.dropdown-header > select:focus {
+    outline: none;
+  }
+  table > thead th,
+  table > thead th > select {
+    font-family: Arial;
+    font-size: 1em;
+    vertical-align: middle;
+  }
