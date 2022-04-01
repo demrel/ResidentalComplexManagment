@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Services
 {
-    internal class BuildingService
+    internal class BuildingService : IBuilding
     {
         private readonly IRepository<Building> _repository;
 
@@ -19,10 +19,10 @@ namespace ResidentalComplexManagment.Application.Services
             _repository = repository;
         }
 
-        public async Task<Building> Add(BuildingDTO mtkDTo)
+        public async Task Add(BuildingDTO mtkDTo)
         {
             var building = new Building(mtkDTo.Number, mtkDTo.Name, mtkDTo.Address, mtkDTo.MKTId);
-            return await _repository.AddAsync(building);
+            await _repository.AddAsync(building);
         }
 
         public async Task Update(BuildingDTO mtkDTo)
@@ -47,5 +47,22 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task<List<BuildingDTO>> GetList() =>
           await _repository.ListAsync(new Buildingpecifiaction());
+
+        public async Task<BuildingDTO> GetById(string id) {
+
+
+          var building=   await _repository.GetByIdAsync(id);
+            return new BuildingDTO()
+            {
+                Id = building.Id,
+                Address = building.Address,
+                Number = building.Number,
+                Name = building.Name,
+                Created = building.Created,
+            };
+        }
+
+        public async Task<List<SelectListItemDto>> GetBuildingSelectList(string mtkId)=>
+              await _repository.ListAsync(new BuildingSelectListSpecifiaction(mtkId));
     }
 }

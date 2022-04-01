@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Interface
 {
-    public interface ISmsSender
+    public interface IMTK : IBase<MTKDTO>
     {
-        Task SendAsync(List<SmsRecipeint> recipients);
+        Task<List<SelectListItemDto>> GetMtkSelectList();
     }
 }

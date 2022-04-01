@@ -9,21 +9,20 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Specifications
 {
-    internal  class MTKSpecifiaction : Specification<MKT,MTKDTO>
+    internal class MTKSelectListSpecifiaction : Specification<MKT, SelectListItemDto>
     {
-        public MTKSpecifiaction()
-        {
-            Query.Select(x => new MTKDTO
+      
+            public MTKSelectListSpecifiaction()
             {
-                Id = x.Id,
-                Name =x.Name,
-                IBAN = x.IBAN,
-                Address =x.Address,
-                PhoneNumber=x.PhoneNumber
-            });
-              
-        }
+                Query.Select(x => new SelectListItemDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
+
+            }
 
 
+        
     }
 }

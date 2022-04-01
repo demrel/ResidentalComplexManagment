@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Services
 {
-    public class AppartmentService
+    public class AppartmentService : IAppartment
     {
         private readonly IRepository<Appartment> _repository;
 
@@ -20,10 +20,10 @@ namespace ResidentalComplexManagment.Application.Services
             _repository = repository;
         }
 
-        public async Task<Appartment> Add(AppartmentDTO mtkDTo)
+        public async Task Add(AppartmentDTO mtkDTo)
         {
             var apparment = new Appartment(mtkDTo.DoorNumber, mtkDTo.Area, mtkDTo.BuildingId);
-            return await _repository.AddAsync(apparment);
+            await _repository.AddAsync(apparment);
         }
 
         public async Task Update(AppartmentDTO mtkDTo)
@@ -49,8 +49,21 @@ namespace ResidentalComplexManagment.Application.Services
         public async Task<List<AppartmentDTO>> GetList() =>
           await _repository.ListAsync(new AppartmentSpecifiaction());
 
-       // public async Task<List<Resident>> Residents() =>
+        public async Task<AppartmentDTO> GetById(string Id)
+        {
+            var building = await _repository.GetByIdAsync(Id);
+            return new AppartmentDTO()
+            {
+                Id = building.Id,
+                DoorNumber = building.DoorNumber,
+                Area = building.Area,
+                BuildingId = building.Id,
+            
+            };
+        }
 
-        
+        // public async Task<List<Resident>> Residents() =>
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using Ardalis.Specification;
-using ResidentalComplexManagment.Core.Interface;
+﻿using ResidentalComplexManagment.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,5 +6,5 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Interface;
-public interface IReadRepository<T> : IReadRepositoryBase<T> where T : class, IAggregateRoot { }
 
+public interface IAppartment : IBase<AppartmentDTO> { }

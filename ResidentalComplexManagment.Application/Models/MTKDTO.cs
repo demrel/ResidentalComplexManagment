@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Models
 {
-    public class MTKDTo : BaseDTO
+    public class MTKDTO : BaseDTO
     {
         public string Name { get;  set; }
         public string IBAN { get;  set; }

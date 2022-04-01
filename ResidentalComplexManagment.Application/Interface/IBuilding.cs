@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Interface
 {
-    public interface ISmsSender
+    public interface IBuilding : IBase<BuildingDTO>
     {
-        Task SendAsync(List<SmsRecipeint> recipients);
+        Task<List<SelectListItemDto>> GetBuildingSelectList(string mtkId);
+
     }
 }

@@ -1,7 +1,13 @@
+using ResidentalComplexManagment.Application;
+using ResidentalComplexManagment.Infrastructure;
+using ResidentalComplexManagment.Web.DependencyHelper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddMvc().AddRazorRuntimeCompilation();
+builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.AddInfrastructureServices().AddApplicationServices().AddWebServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

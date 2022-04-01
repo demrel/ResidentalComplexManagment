@@ -19,7 +19,7 @@ namespace ResidentalComplexManagment.Application.Specifications
                Name= x.Name,
                Created = x.Created,
                Address= x.Address,
-             
+               MKTName=x.MKT.Name     
             });
               
         }

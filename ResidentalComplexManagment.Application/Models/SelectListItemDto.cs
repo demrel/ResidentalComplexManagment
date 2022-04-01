@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Models
 {
-    public class BuildingDTO : BaseDTO
+    public class SelectListItemDto
     {
-        public int Number { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public string MKTId { get; set; }
-        public string MKTName { get; set; }
 
     }
 }
