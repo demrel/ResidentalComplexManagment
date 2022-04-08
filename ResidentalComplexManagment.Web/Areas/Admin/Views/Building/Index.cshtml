@@ -1,20 +1,20 @@
 ﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.BuildingIndexVM;
 @{
-    ViewData["Title"] = "MTK";
+    ViewData["Title"] = "Bina";
 }
 
 <div class="d-lg-flex d-md-flex d-sm-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
-    <h2 class="h2">İstifadəçilər</h2>
+    <h2 class="h2">@ViewData["Title"]</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group w-100 ">
-            <a href="/admin/building/add"  class="btn p-2 text-white border bg-primary" type="button">Yeni Mtk yarat</a>
+            <a href="/admin/building/add"  class="btn p-2 text-white border bg-primary" type="button">Yeni Bina yarat</a>
         </div>
     </div>
 </div>
 <div class="card px-4 shadowBox border-0 table-responsive border-radius-card">
     <div class="row align-items-center ">
         <div class="col-lg-6">
-            <h5 class="my-4 float-lg-left">İstifadəçilər</h5>
+            <h5 class="my-4 float-lg-left">@ViewData["Title"]</h5>
         </div>
         <div class="col-lg-6">
             <div class="float-lg-right d-lg-flex  align-items-center">
@@ -32,8 +32,8 @@
             <tr>
                 <th class="pl-4 ">Adı</th>
                 <th class="pl-4 ">Nömrəsi</th>
-                <th class="pl-4 ">Ünvan</th>
                 <th class="pl-4 ">MKT adı</th>
+                <th class="pl-4 ">Ünvan</th>
                 <th class="pl-4 ">ACTION </th>
             </tr>
         </thead>
@@ -50,6 +50,8 @@
                     <td class="pl-4" data-label="ACTION">
                         <a asp-action="Update" asp-controller="Building" asp-route-id="@item.Id"><i class="far fa-edit"></i> </a> 
                         <a asp-action="Delete" asp-controller="Building" asp-route-id="@item.Id"> <i class="far fa-trash-alt"></i> </a>  
+                        <a asp-action="Get" asp-controller="Building" asp-route-id="@item.Id"> <i class="fas fa-home"></i> </a>  
+
                     </td>
                 </tr>
             }
@@ -75,4 +77,7 @@
     </nav>
 </div>
 
-
+@section Script{
+ <script src="~/assets/js/script.js"></script>
+}
+   

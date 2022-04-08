@@ -10,13 +10,16 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
     public class BuildingController : BaseAdminController
     {
         private readonly IBuilding _buildingService;
+        private readonly IAppartment _appartmentService;
+
         private readonly IMTK _mtkService;
 
 
-        public BuildingController(IBuilding buildingService, IMTK mtkService)
+        public BuildingController(IBuilding buildingService, IMTK mtkService, IAppartment appartmentService)
         {
             _buildingService = buildingService;
             _mtkService = mtkService;
+            _appartmentService = appartmentService;
         }
 
         public async Task<IActionResult> Index()
@@ -32,12 +35,28 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add(string mtkId)
         {
-            var mtkList = await _mtkService.GetMtkSelectList();
+            var mtkList = await _mtkService.GetSelectList();
             BuildingAddVM buildingAddVM = new()
             {
                 Mkt = new SelectList(mtkList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), mtkId)
             };
             return View(buildingAddVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(string id)
+        {
+
+            var building = await _buildingService.GetById(id);
+            if(building==null) return NotFound();
+
+            var appartments= await _appartmentService.GetAppartmentsByBuilding(id);
+            var model = new BuildingGetVM()
+            {
+                Building = building,
+                Appartments = appartments
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -51,13 +70,22 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Update(string id)
         {
             var building = await _buildingService.GetById(id);
-            var mktList = await _mtkService.GetMtkSelectList();
+            if (building == null) return NotFound();
+            
+            var mktList = await _mtkService.GetSelectList();
             BuildingAddVM buildingAddVM = new()
             {
                 Mkt = new SelectList(mktList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), building.MKTId),
-                Add=building,
+                Add = building,
             };
             return View(buildingAddVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBuildingList(string id)
+        {
+            var building = await _buildingService.GetSelectList(id);
+            return Ok(building);
         }
 
         [HttpPost]

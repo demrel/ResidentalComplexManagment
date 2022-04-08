@@ -4,13 +4,13 @@
 }
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
-    <h2 class="h2">MTK redaktə et</h2>
+    <h2 class="h2">@ViewData["Title"]</h2>
 </div>
-<form asp-action="Update" asp-controller="MTK"  method="post">
+<form asp-action="Update" asp-controller="MTK" method="post">
     <div class="card mb-3 px-4 shadowBox border-0  border-radius-card">
-        <h5 class="my-4 font-weight-bold">Yeni MTK əlavə et</h5>
+        <h5 class="my-4 font-weight-bold">@ViewData["Title"]</h5>
 
-        <input type="hidden" class="form-control"  asp-for="Id" />
+        <input type="hidden" class="form-control" asp-for="Id" />
 
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -39,17 +39,14 @@
             <div class="col-lg-6 col-12">
                 <div class="form-group">
                     <label for="formGroupExampleInput">Ünvan</label>
-                    <textarea  id="formGroupExampleInput" rows="5" class="form-control" asp-for="Address"></textarea>
+                    <textarea id="formGroupExampleInput" rows="5" class="form-control" asp-for="Address"></textarea>
                 </div>
             </div>
 
 
         </div>
-
-
-
     </div>
 
     <button type="submit" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
-    <button type="button" asp-action="Index" asp-controller="MTK" class="btn p-2  text-white border bg-primary">Imtina</button>
+    <a type="button" asp-action="Index" asp-controller="MTK" class="btn p-2  text-white border bg-primary">Imtina</a>
 </form>

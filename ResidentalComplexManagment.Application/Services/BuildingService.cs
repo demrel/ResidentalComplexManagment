@@ -30,7 +30,7 @@ namespace ResidentalComplexManagment.Application.Services
             var building = await _repository.GetByIdAsync(mtkDTo.Id);
 
             building.UpdateDetails(mtkDTo.Number, mtkDTo.Name, mtkDTo.Address);
-            await _repository.UpdateAsync(building);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task Delete(string Id)
@@ -48,21 +48,16 @@ namespace ResidentalComplexManagment.Application.Services
         public async Task<List<BuildingDTO>> GetList() =>
           await _repository.ListAsync(new Buildingpecifiaction());
 
-        public async Task<BuildingDTO> GetById(string id) {
+        public async Task<BuildingDTO> GetById(string id) =>
+            await _repository.GetBySpecAsync(new IncludeALlParamsToBuilding(id));
 
 
-          var building=   await _repository.GetByIdAsync(id);
-            return new BuildingDTO()
-            {
-                Id = building.Id,
-                Address = building.Address,
-                Number = building.Number,
-                Name = building.Name,
-                Created = building.Created,
-            };
-        }
 
-        public async Task<List<SelectListItemDto>> GetBuildingSelectList(string mtkId)=>
+        public async Task<List<SelectListItemDto>> GetSelectList(string mtkId) =>
               await _repository.ListAsync(new BuildingSelectListSpecifiaction(mtkId));
+
+        public async Task<List<BuildingDTO>> GetBuildingsByMtk(string mtkId) =>
+             await _repository.ListAsync(new Buildingpecifiaction(mtkId));
+
     }
 }

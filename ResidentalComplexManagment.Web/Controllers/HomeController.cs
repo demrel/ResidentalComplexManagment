@@ -15,6 +15,7 @@ namespace ResidentalComplexManagment.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("HelloWorld");
             return View();
         }
 

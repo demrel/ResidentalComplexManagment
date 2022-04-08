@@ -3,9 +3,9 @@ using ResidentalComplexManagment.Application.Models;
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Models
 {
-    public class AppartmentAddVM
+    public class AppartmentAddVM : BaseAddVM
     {
         public AppartmentDTO Add { get; set; }
-        public SelectList Buildings { get; set; }
+       
     }
 }

@@ -11,6 +11,8 @@ namespace ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 
 public class Appartment :BaseEntity, IAggregateRoot
 {
+    
+    public string Name => $"Mənzil N: {DoorNumber} Kvm: {Area}";
     public int DoorNumber { get;private set; }
     public decimal Area { get; private set; }
     public string BuildingId { get; private set; }
@@ -37,7 +39,6 @@ public class Appartment :BaseEntity, IAggregateRoot
     {
         Guard.Against.NegativeOrZero(doorNumber, nameof(doorNumber));
         Guard.Against.NegativeOrZero(area, nameof(area));
-
         DoorNumber = doorNumber;
         Area = area;
     }

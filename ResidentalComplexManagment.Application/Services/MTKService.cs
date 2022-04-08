@@ -24,7 +24,7 @@ namespace ResidentalComplexManagment.Application.Services
         {
             var mtk=await _repository.GetByIdAsync(mtkDTo.Id);
             mtk.UpdateDetails(mtkDTo.Name, mtkDTo.IBAN, mtkDTo.Address, mtkDTo.PhoneNumber);
-            await _repository.UpdateAsync(mtk);
+           await _repository.SaveChangesAsync();
         }
 
         public async Task Delete(string Id)
@@ -45,12 +45,11 @@ namespace ResidentalComplexManagment.Application.Services
                 Name = mtk.Name,
                 Created= mtk.Created,
             };
-
         }
         public async Task<List<MTKDTO>> GetList()=>
           await _repository.ListAsync(new MTKSpecifiaction());
 
-        public async Task<List<SelectListItemDto>> GetMtkSelectList()=>
+        public async Task<List<SelectListItemDto>> GetSelectList()=>
             await _repository.ListAsync(new MTKSelectListSpecifiaction());
         
     }

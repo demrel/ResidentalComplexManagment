@@ -23,6 +23,7 @@ public class EfRepository<T> : RepositoryBase<T>, IReadRepository<T>, IRepositor
         return base.AddAsync(entity, cancellationToken);
     }
 
+
     public override Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         entity.Id = Guid.NewGuid().GetAlphaNumeric();

@@ -9,7 +9,8 @@ namespace ResidentalComplexManagment.Application.Interface
 {
     public interface IBuilding : IBase<BuildingDTO>
     {
-        Task<List<SelectListItemDto>> GetBuildingSelectList(string mtkId);
+        Task<List<SelectListItemDto>> GetSelectList(string mtkId);
+        Task<List<BuildingDTO>> GetBuildingsByMtk(string mtkId);
 
     }
 }

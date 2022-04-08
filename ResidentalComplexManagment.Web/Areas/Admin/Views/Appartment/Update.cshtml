@@ -1,0 +1,109 @@
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.AppartmentUpdateVM;
+
+@{
+    ViewData["Title"] = "Mənzil Redaktə Et";
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
+    <h2 class="h2">@ViewData["Title"]</h2>
+</div>
+<form asp-action="Update" asp-controller="Appartment" method="post">
+
+    <input type="hidden" asp-for="Add.Id" />
+
+
+    <div class="card mb-3 px-4 shadowBox border-0  border-radius-card">
+        <h5 class="my-4 font-weight-bold">@ViewData["Title"]</h5>
+
+
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Mənzil Nömrəsi</label>
+                    <input type="number" min="1" class="form-control" id="formGroupExampleInput" placeholder="Mənzil Nömrəsi" asp-for="Add.DoorNumber" />
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Sahəsi kv m</label>
+                    <input type="number" class="form-control" id="formGroupExampleInput"
+                           placeholder="Sahəsi" asp-for="Add.Area">
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-6 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput" class="d-block">MTK</label>
+                    <select class="selectpicker my-select border border-radius-card" id="mtk" data-style="btn-white" data-width="100%">
+                        @foreach (var mkt in Model.Mkts)
+                        {
+                            <option value="@mkt.Id">@mkt.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput" class="d-block">Bina</label>
+                    <select class="selectpicker my-select border border-radius-card" id="building" data-style="btn-white" data-width="100%" asp-for="Add.BuildingId" required>
+                           @foreach (var mkt in Model.Buildings)
+                        {
+                            <option value="@mkt.Id">@mkt.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+    <button type="submit" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
+    <a type="button" asp-action="Index" asp-controller="Appartment" class="btn p-2  text-white border bg-primary">Imtina</a>
+
+</form>
+
+@section Script{
+<script>
+
+      var mktSelectList=document.getElementById('mtk');
+      var buildingSelectList=document.getElementById('building');
+      var selectPickerBuild=$("#building");
+      var selectPickerMtk=$("#mtk");
+
+      selectPickerMtk.selectpicker('val', '@Model.Add.MtkId');
+      selectPickerBuild.selectpicker('val','@Model.Add.BuildingId');
+
+
+     mktSelectList.onchange=function(){
+         LoadBuildings(this.value)
+     }
+
+    async function LoadBuildings(id){
+
+        let response = await fetch("/admin/Building/GetBuildingList/"+id);
+        if (response.ok)
+        {
+           let json = await response.json()
+          
+              selectPickerBuild.empty();
+              selectPickerBuild.append("------","0")
+              json.forEach(c=>selectPickerBuild.append(new Option(c.name,c.id)));
+              selectPickerBuild.selectpicker("refresh");
+        }
+        else
+            console.log("HTTP-Error: " + response.status);
+
+  }
+
+</script>
+}

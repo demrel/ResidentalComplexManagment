@@ -7,4 +7,8 @@ using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Interface;
 
-public interface IAppartment : IBase<AppartmentDTO> { }
+public interface IAppartment : IBase<AppartmentDTO> 
+{
+    Task<List<SelectListItemDto>> GetSelectList(string buildingId);
+    Task<List<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId);
+}

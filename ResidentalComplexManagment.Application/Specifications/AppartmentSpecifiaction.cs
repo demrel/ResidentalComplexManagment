@@ -18,9 +18,32 @@ namespace ResidentalComplexManagment.Application.Specifications
                Id= x.Id,
                DoorNumber= x.DoorNumber,
                Created = x.Created,
+               Area=x.Area,
+               MtkName=x.Building.MKT.Name,
+               BuildingName=x.Building.Name,
+            
+
             });
               
         }
+
+        public AppartmentSpecifiaction(string id)
+        {
+            Query.Select(x => new AppartmentDTO
+            {
+                Id = x.Id,
+                DoorNumber = x.DoorNumber,
+                Created = x.Created,
+                Area = x.Area,
+                MtkName = x.Building.MKT.Name,
+                BuildingName = x.Building.Name,
+                BuildingId = x.Building.Id,
+                MtkId = x.Building.MKT.Id,
+
+            }).Where(c => c.BuildingId == id);
+
+        }
+
 
 
     }

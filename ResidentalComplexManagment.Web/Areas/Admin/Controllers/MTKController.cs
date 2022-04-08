@@ -8,10 +8,14 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
     public class MTKController : BaseAdminController
     {
         private readonly IMTK _mtkService;
+        private readonly IBuilding _buildingServie;
 
-        public MTKController(IMTK mtkService)
+
+
+        public MTKController(IMTK mtkService, IBuilding buildingServie)
         {
             _mtkService = mtkService;
+            _buildingServie = buildingServie;
         }
 
         public async Task<IActionResult> Index()
@@ -28,6 +32,20 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public IActionResult Add()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(string id)
+        {
+            var mtk=  await _mtkService.GetById(id);
+            if (mtk == null) return NotFound();         
+            var buildings = await _buildingServie.GetBuildingsByMtk(id);
+            var model = new MtkGetVM()
+            {
+                Buildings = buildings,
+                MTK = mtk
+            };
+            return View(model);
         }
 
         [HttpPost]

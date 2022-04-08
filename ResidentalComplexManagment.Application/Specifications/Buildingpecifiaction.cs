@@ -19,11 +19,25 @@ namespace ResidentalComplexManagment.Application.Specifications
                Name= x.Name,
                Created = x.Created,
                Address= x.Address,
-               MKTName=x.MKT.Name     
+               MKTName=x.MKT.Name,
+               Number= x.Number,
+               
             });
               
         }
 
+        public Buildingpecifiaction(string mtkId)
+        {
+            Query.Select(x => new BuildingDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Created = x.Created,
+                Address = x.Address,
+                MKTName = x.MKT.Name,
+                Number = x.Number,
 
+            }).Where(c=>c.MKTId==mtkId);
+        }
     }
 }

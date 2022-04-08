@@ -89,6 +89,9 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric");
 
@@ -282,7 +285,7 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("Date");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");

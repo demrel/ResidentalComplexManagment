@@ -31,7 +31,7 @@ namespace ResidentalComplexManagment.Application.Services
             var building = await _repository.GetByIdAsync(mtkDTo.Id);
 
             building.UpdateDetails(mtkDTo.DoorNumber, mtkDTo.Area);
-            await _repository.UpdateAsync(building);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task Delete(string Id)
@@ -40,29 +40,23 @@ namespace ResidentalComplexManagment.Application.Services
             await _repository.DeleteAsync(mtk);
         }
 
-        public async Task GetList(string Id)
-        {
-            var mtk = await _repository.GetByIdAsync(Id);
-            await _repository.DeleteAsync(mtk);
-        }
+
+
+
+        public async Task<List<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId) =>
+       await _repository.ListAsync(new AppartmentSpecifiaction(buildingId));
 
         public async Task<List<AppartmentDTO>> GetList() =>
           await _repository.ListAsync(new AppartmentSpecifiaction());
 
-        public async Task<AppartmentDTO> GetById(string Id)
-        {
-            var building = await _repository.GetByIdAsync(Id);
-            return new AppartmentDTO()
-            {
-                Id = building.Id,
-                DoorNumber = building.DoorNumber,
-                Area = building.Area,
-                BuildingId = building.Id,
-            
-            };
-        }
+        public async Task<AppartmentDTO> GetById(string Id) =>
+             await _repository.GetBySpecAsync(new IncludeALlParamsToAppartment(Id));
 
-        // public async Task<List<Resident>> Residents() =>
+
+
+
+        public async Task<List<SelectListItemDto>> GetSelectList(string mtkId) =>
+             await _repository.ListAsync(new AppartmentSelectListSpec(mtkId));
 
 
     }

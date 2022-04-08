@@ -4,6 +4,8 @@ using ResidentalComplexManagment.Core.Entities.ResidentNotifications;
 using ResidentalComplexManagment.Core.Interface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +19,9 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public string FullName => Name +" "+ Surname;
         public string FIN { get; private set; }
         public string PhoneNumber { get; private set; }
+
+        [DataType(DataType.Date)]
+        [Column(TypeName = "Date")]
         public DateTime? Birthday { get; private set; }
         public bool IsCurrentResident { get; private set; }
         public string AppartmentId { get; private set; }
