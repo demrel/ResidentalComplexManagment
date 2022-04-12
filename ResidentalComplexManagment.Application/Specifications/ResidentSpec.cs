@@ -28,7 +28,7 @@ namespace ResidentalComplexManagment.Application.Specifications
                Created=x.Created,
                BuildingName=x.Appartment.Building.Name,
                MKTName = x.Appartment.Building.MKT.Name,
-            });
+            }).OrderByDescending(c=>c.Created);
               
         }
 

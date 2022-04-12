@@ -90,64 +90,8 @@
 
     </div>
 
-    <button type="submit" asp-route-redirect="false" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
-    <button type="submit" asp-route-redirect="true" class="btn p-2  text-white border bg-primary">Yadda saxla Qayıt</button>
-    <a type="button" asp-action="Index" asp-controller="MTK" class="btn p-2  text-white border bg-primary">Imtina</a>
+    <button type="submit" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
+    <a type="button" asp-action="Index" asp-controller="Resident" class="btn p-2  text-white border bg-primary">Imtina</a>
 
 </form>
 
-@*@section Script{
-<script>
-
-      var mktSelectList=document.getElementById('mtk');
-      var buildingSelectList=document.getElementById('building');
-      var appartmentSelectList=document.getElementById('appartment');
-
-     var selectPickerBuild=$("#building");
-     var selectPickerMtk=$("#mtk");
-     var selectPickerAppartment=$("#appartment");
-
-     selectPickerMtk.selectpicker('val', '@Model.Add.MKTID');
-      selectPickerBuild.selectpicker('val','@Model.Add.BuildingId');
-      selectPickerAppartment.selectpicker('val','@Model.Add.AppartmentId');
-
-
-     mktSelectList.onchange=function(){
-         LoadBuildings(this.value)
-     }
-
-     buildingSelectList.onchange=function(){
-         LoadAppartments(this.value)
-     }
-
-    async function LoadBuildings(id){
-        let response = await fetch("/admin/Building/GetBuildingList/"+id);
-        if (response.ok)
-        {
-           let json = await response.json()
-              selectPickerBuild.empty();
-              json.forEach(c=>selectPickerBuild.append(new Option(c.name,c.id)));
-              selectPickerBuild.selectpicker("refresh");
-        }
-        else
-            console.log("HTTP-Error: " + response.status);
-
-        }
-
-          async function LoadAppartments(id){
-        let response = await fetch("/admin/appartment/GetAppartmentList/"+id);
-        if (response.ok)
-        {
-           let json = await response.json()
-              selectPickerAppartment.empty();
-              json.forEach(c=>selectPickerAppartment.append(new Option(c.name,c.id)));
-              selectPickerAppartment.selectpicker("refresh");
-        }
-        else
-            console.log("HTTP-Error: " + response.status);
-
-        }
-
-
-</script>
-}*@

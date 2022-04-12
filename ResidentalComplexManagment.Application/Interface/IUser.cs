@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResidentalComplexManagment.Core.Entities.Users
+namespace ResidentalComplexManagment.Application.Interface
 {
-    public class AppUser
+    public interface IUser
     {
-        public string FullName { get; set; }
     }
 }

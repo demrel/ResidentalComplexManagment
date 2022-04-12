@@ -24,22 +24,22 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task Add(ResidentDTO residentDto)
         {
-           var appartment = await _appartmentRepository.GetBySpecAsync(new IncludeAllResidentsInAppartmentSpec(residentDto.AppartmentId));
+            var appartment = await _appartmentRepository.GetBySpecAsync(new IncludeAllResidentsInAppartmentSpec(residentDto.AppartmentId));
             if (appartment == null) return;
 
             var resident = new Resident(residentDto.Name, residentDto.Surname, residentDto.FIN, residentDto.PhoneNumber, residentDto.Birthday);
-           appartment.AddNewResident(resident);
+            appartment.AddNewResident(resident);
             await _residentRepository.AddAsync(resident);
         }
 
         public async Task Update(ResidentDTO residentDto)
         {
-            var resident =await _residentRepository.GetByIdAsync(residentDto.Id);
+            var resident = await _residentRepository.GetByIdAsync(residentDto.Id);
             if (resident == null) return;
-            resident.UpdateDetails(resident.Name,resident.Surname,resident.FIN,resident.PhoneNumber,resident.Birthday);
+            resident.UpdateDetails(resident.Name, resident.Surname, resident.FIN, resident.PhoneNumber, resident.Birthday);
             await _residentRepository.SaveChangesAsync();
         }
-        
+
         public async Task Delete(string residentId)
         {
             var resident = await _residentRepository.GetByIdAsync(residentId);
@@ -48,12 +48,13 @@ namespace ResidentalComplexManagment.Application.Services
             await _residentRepository.SaveChangesAsync();
         }
 
-        public async Task<List<ResidentDTO>> GetList()=> await _residentRepository.ListAsync(new ResidentSpec());
+        public async Task<List<ResidentDTO>> GetList() => await _residentRepository.ListAsync(new ResidentSpec());
         public async Task<List<ResidentDTO>> GetResidentsByAppartment(string id) => await _residentRepository.ListAsync(new ResidentSpec(id));
 
 
-        public async Task<ResidentDTO> GetById(string Id) {
-            var resident =await _residentRepository.GetByIdAsync(Id);
+        public async Task<ResidentDTO> GetById(string Id)
+        {
+            var resident = await _residentRepository.GetByIdAsync(Id);
             if (resident == null) return null;
 
             return new ResidentDTO()
@@ -68,6 +69,6 @@ namespace ResidentalComplexManagment.Application.Services
                 AppartmentId = resident.AppartmentId,
             };
         }
-       
+
     }
 }

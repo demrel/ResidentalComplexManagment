@@ -1,14 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Core.Entities.Accountment;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 using ResidentalComplexManagment.Core.Entities.ResidentNotifications;
 using ResidentalComplexManagment.Core.Entities.Users;
-
+using ResidentalComplexManagment.Infrastructure.IdentityEntity;
 
 namespace ResidentalComplexManagment.Infrastructure.Data
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>, AppUserRole, IdentityUserLogin<string>,
+    IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
       
         public AppDBContext(DbContextOptions<AppDBContext> options, ICurrentUserService currentUserService) : base(options)
