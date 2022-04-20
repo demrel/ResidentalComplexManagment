@@ -8,10 +8,11 @@ namespace ResidentalComplexManagment.Application.Services
     public class MTKService : IMTK
     {
         private readonly IRepository<MKT> _repository;
-
-        public MTKService(IRepository<MKT> repository)
+        private readonly IUser _userService;
+        public MTKService(IRepository<MKT> repository, IUser userService)
         {
             _repository = repository;
+            _userService = userService;
         }
 
         public async Task Add(MTKDTO mtkDTo)
@@ -51,6 +52,11 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task<List<SelectListItemDto>> GetSelectList()=>
             await _repository.ListAsync(new MTKSelectListSpecifiaction());
-        
+
+        public async Task<List<SelectListItemDto>> GetSelectList(string id)
+        {
+          var user =await  _userService.GetById(id);
+          return   await _repository.ListAsync(new MTKSelectListSpecifiaction(user?.MktId));
+        }
     }
 }

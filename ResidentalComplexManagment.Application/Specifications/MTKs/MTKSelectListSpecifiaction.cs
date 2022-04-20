@@ -22,7 +22,20 @@ namespace ResidentalComplexManagment.Application.Specifications
 
             }
 
+        public MTKSelectListSpecifiaction(string mktId)
+        {
+            Query.Select(x => new SelectListItemDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+            });
+            if (!string.IsNullOrEmpty(mktId))
+            {
+                Query.Where(c => c.Id == mktId);
+            } 
+                
 
-        
+        }
+
     }
 }

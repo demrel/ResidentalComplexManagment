@@ -13,7 +13,7 @@ public static class ApplicationDependencies
         services.AddScoped<IBuilding, BuildingService>();
         services.AddScoped<IAppartment, AppartmentService>();
         services.AddScoped<IResident, ResidentService>();
-        services.AddScoped<IPaymentCofficient, PaymentCoefficientService>();
+        services.AddScoped<IDebtItem, DebtItemService>();
 
 
         return services;

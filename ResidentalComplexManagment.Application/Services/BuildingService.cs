@@ -2,21 +2,20 @@
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Application.Specifications;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+
 
 namespace ResidentalComplexManagment.Application.Services
 {
     internal class BuildingService : IBuilding
     {
         private readonly IRepository<Building> _repository;
+        private readonly IUser _userService;
 
-        public BuildingService(IRepository<Building> repository)
+        public BuildingService(IRepository<Building> repository, IUser userService)
         {
             _repository = repository;
+            _userService = userService;
         }
 
         public async Task Add(BuildingDTO mtkDTo)
@@ -39,14 +38,17 @@ namespace ResidentalComplexManagment.Application.Services
             await _repository.DeleteAsync(mtk);
         }
 
-        public async Task GetList(string Id)
-        {
-            var mtk = await _repository.GetByIdAsync(Id);
-            await _repository.DeleteAsync(mtk);
-        }
+
 
         public async Task<List<BuildingDTO>> GetList() =>
           await _repository.ListAsync(new Buildingpecifiaction());
+
+
+        public async Task<List<BuildingDTO>> GetList(string id)
+        {
+            var user = await _userService.GetById(id);
+            return await _repository.ListAsync(new Buildingpecifiaction(user?.MktId));
+        }
 
         public async Task<BuildingDTO> GetById(string id) =>
             await _repository.GetBySpecAsync(new IncludeALlParamsToBuilding(id));
@@ -58,6 +60,7 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task<List<BuildingDTO>> GetBuildingsByMtk(string mtkId) =>
              await _repository.ListAsync(new Buildingpecifiaction(mtkId));
+
 
     }
 }

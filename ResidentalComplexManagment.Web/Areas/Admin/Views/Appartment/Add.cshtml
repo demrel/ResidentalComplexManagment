@@ -67,10 +67,11 @@
 
        var mktSelectList=document.getElementById('mtk');
        var buildingSelectList=document.getElementById('building');
-    
+        
 
       mktSelectList.onchange=function(){
           LoadBuildings(this.value)
+          
       }
 
      async function LoadBuildings(id){

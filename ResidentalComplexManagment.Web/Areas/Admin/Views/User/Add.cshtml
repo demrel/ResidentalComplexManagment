@@ -1,0 +1,94 @@
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.UserAddVM;
+@{
+    ViewData["Title"] = "Yeni İstifadəçi Əlavə Et";
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
+    <h2 class="h2">@ViewData["Title"]</h2>
+</div>
+<form asp-action="Add" asp-controller="User" method="post">
+
+
+
+    <div class="card mb-3 px-4 shadowBox border-0  border-radius-card">
+        <h5 class="my-4 font-weight-bold">Yeni Bina əlavə et</h5>
+
+
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label>Adı</label>
+                    <input type="text" class="form-control" placeholder="Adı" asp-for="Add.Name" />
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label>Soyadı</label>
+                    <input type="text" class="form-control" placeholder="Soyadı" asp-for="Add.SurName" />
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label>İstifadəçi adı</label>
+                    <input type="text" class="form-control" placeholder="İstifadəçi adı" asp-for="Add.UserName" />
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label>Şifrə</label>
+                    <input type="text" class="form-control" placeholder="Şifrə" asp-for="Password" />
+                </div>
+            </div>
+
+             <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput" class="d-block">Rol</label>
+                    <select class="selectpicker my-select border border-radius-card" id="role" data-style="btn-white" data-width="100%" asp-for="Add.Role" asp-items="Model.UserRoles">
+                    <option value="">----------</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput" class="d-block">MTK</label>
+                    <select class="selectpicker my-select border border-radius-card" disabled  id="mtk" data-style="btn-white" data-width="100%" asp-for="Add.MktId" asp-items="Model.MTKs">
+                   <option value="">----------</option>
+                    </select>
+                </div>
+            </div>
+
+           
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
+    <a type="button" asp-action="Index" asp-controller="User" class="btn p-2  text-white border bg-primary">Imtina</a>
+
+
+</form>
+@section Script{
+<script>
+
+       var mktSelectList=document.getElementById('mtk');
+       var buildingSelectList=document.getElementById('role');
+    
+
+      buildingSelectList.onchange=function(){
+          console.log(this.value);
+          EnableDisable(this.value=='@UserRoles.Supervizor');
+      }
+
+      function EnableDisable(isChoosed){
+            $("#mtk").prop('disabled',!isChoosed);
+            $('#mtk').selectpicker('refresh');
+      }
+
+   
+
+</script>
+}

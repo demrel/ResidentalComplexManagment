@@ -1,13 +1,13 @@
-﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.PaymentCofficientIndexVM;
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.UserIndexVM;
 @{
-    ViewData["Title"] = "Ödəniş əmsalı";
+    ViewData["Title"] = "İstifadəçi";
 }
 
 <div class="d-lg-flex d-md-flex d-sm-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
     <h2 class="h2">@ViewData["Title"]</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group w-100 ">
-            <a href="/admin/PaymentCofficient/add"  class="btn p-2 text-white border bg-primary" type="button">əmsal əlavə et</a>
+            <a href="/admin/user/add"  class="btn p-2 text-white border bg-primary" type="button">Yeni İstifadəçi yarat</a>
         </div>
     </div>
 </div>
@@ -30,24 +30,31 @@
     <table class="table w-100 table-borderless mt-4 mt-lg-0">
         <thead class="bgSecondary">
             <tr>
-                <th class="pl-4 ">Vaxt </th>
-                <th class="pl-4 ">Dəyəri </th>
-                <th class="pl-4 ">Qeyd</th>
-@*                <th class="pl-4 ">ACTION </th>
-*@            </tr>
+                <th class="pl-4 ">Ad</th>
+                <th class="pl-4 ">Soyad</th>
+                <th class="pl-4 ">İstifadəçi adı</th>
+                <th class="pl-4 ">Mtk</th>
+                <th class="pl-4 ">Rol</th>
+                <th class="pl-4 ">ACTION </th>
+            </tr>
         </thead>
         <tbody>
-            @foreach (var item in @Model.PaymentCofficients)
+            @foreach (var item in @Model.Users)
             {
                 <tr>
-                    <td class="pl-4" data-label="Vaxt">@item.Time</td>
-                    <td class="pl-4" data-label="Əmsal ">@item.Value</td>
-                    <td class="pl-4" data-label="Qeyd">@item.Note</td>
+                    <td class="pl-4" data-label="Ad">@item.Name</td>
+                    <td class="pl-4" data-label="Soyad">@item.SurName</td>
+                    <td class="pl-4" data-label="Telefon">@item.UserName</td>
+                    <td class="pl-4" data-label="Mtk">@item.MtkName</td>
+                    <td class="pl-4" data-label="Mtk">@item.Role</td>
 
 
-                 @*   <td class="pl-4" data-label="ACTION">
-                        <a asp-action="AddFromAppartment" asp-controller="Resident" asp-route-id="@item.Id"> <i class="fas fa-user-plus"></i> </a>  
-                    </td>*@
+                    <td class="pl-4" data-label="ACTION">
+                        <a asp-action="Update" asp-controller="User" asp-route-id="@item.Id"><i class="far fa-edit"></i> </a> 
+                        @*<a asp-action="Delete" asp-controller="Building" asp-route-id="@item.Id"> <i class="far fa-trash-alt"></i> </a>  *@
+                     
+
+                    </td>
                 </tr>
             }
         </tbody>

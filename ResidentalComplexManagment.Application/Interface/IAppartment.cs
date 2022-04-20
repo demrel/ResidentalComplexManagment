@@ -11,4 +11,5 @@ public interface IAppartment : IBase<AppartmentDTO>
 {
     Task<List<SelectListItemDto>> GetSelectList(string buildingId);
     Task<List<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId);
+    Task<List<AppartmentDTO>> GetList(string userId);
 }

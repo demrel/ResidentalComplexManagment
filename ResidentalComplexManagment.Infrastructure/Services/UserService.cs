@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ResidentalComplexManagment.Application.Interface;
+using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Infrastructure.IdentityEntity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Infrastructure.Services
 {
-    public class UserService
+    public class UserService : IUser
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
@@ -24,10 +21,9 @@ namespace ResidentalComplexManagment.Infrastructure.Services
         public async Task Add(UserDTO userDTO, string password)
         {
             var approle = await _roleManager.FindByNameAsync(userDTO.Role);
-            if (approle != null) return;
-
+            if (approle == null) return;
+            if (string.IsNullOrWhiteSpace(password)) return;
             var isUserExist = _userManager.Users.Any(c => c.UserName == userDTO.UserName);
-
             if (isUserExist) return;
 
             var user = new AppUser()
@@ -39,29 +35,37 @@ namespace ResidentalComplexManagment.Infrastructure.Services
             };
 
             await _userManager.CreateAsync(user, password);
-
+          
             await _userManager.AddToRoleAsync(user, userDTO.Role);
         }
+        public async Task SeedRoles()
+        {
+            foreach (var item in Enum.GetNames(typeof(UserRoles)))
+            {
+                await _roleManager.CreateAsync(new AppRole() { Name = item });
+            }
+        }
 
-
-        public async Task<List<UserDTO>> GetList(string id) =>
-          await _userManager.Users.Where(c => c.Id == id).Select(c => new UserDTO()
+        public async Task<List<UserDTO>> GetList() =>
+          await _userManager.Users.Select(c => new UserDTO()
           {
+              Id = c.Id,
               Name = c.UserName,
               SurName = c.SurName,
               UserName = c.UserName,
               MktId = c.MktId,
+              MtkName = c.Mkt.Name,
               Role = c.UserRoles.FirstOrDefault().Role.Name,
           }).ToListAsync();
 
         public async Task<UserDTO> GetById(string id) =>
             await _userManager.Users.Where(c => c.Id == id).Select(c => new UserDTO()
             {
-               Name = c.UserName,
-               SurName = c.SurName,
-               UserName=c.UserName,
-               MktId = c.MktId,
-               Role=c.UserRoles.FirstOrDefault().Role.Name,
+                Name = c.UserName,
+                SurName = c.SurName,
+                UserName = c.UserName,
+                MktId = c.MktId,
+                Role = c.UserRoles.FirstOrDefault().Role.Name,
             }).FirstOrDefaultAsync();
 
 
@@ -71,7 +75,8 @@ namespace ResidentalComplexManagment.Infrastructure.Services
             var approle = await _roleManager.FindByNameAsync(userDTO.Role);
             if (approle == null) return;
 
-            var user = await _userManager.FindByNameAsync(userDTO.UserName);
+            var user = await _userManager.Users.Include(c => c.UserRoles).ThenInclude(c => c.Role)
+                                               .FirstOrDefaultAsync(c => c.UserName == userDTO.UserName);
 
             if (user == null) return;
 
@@ -80,26 +85,23 @@ namespace ResidentalComplexManagment.Infrastructure.Services
             user.Name = userDTO.Name;
             user.SurName = userDTO.SurName;
             user.MktId = userDTO.MktId;
+
             if (!string.IsNullOrEmpty(password))
             {
                 user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, password);
             }
+
             await _userManager.UpdateAsync(user);
 
+            var userLastRole = user.UserRoles.FirstOrDefault().Role.Name;
+            if (userDTO.Role != userLastRole)
+            {
+                await _userManager.RemoveFromRoleAsync(user, userLastRole);
+                await _userManager.AddToRoleAsync(user, userDTO.Role);
+            }
 
-            await _userManager.AddToRoleAsync(user, userDTO.Role);
         }
     }
 
-    public class UserDTO
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string SurName { get; set; }
-        public string FullName => Name + " " + SurName;
-        public string UserName { get; set; }
-        public string MktId { get; set; }
-        public string MtkName { get; set; }
-        public string Role { get; set; }
-    }
+
 }

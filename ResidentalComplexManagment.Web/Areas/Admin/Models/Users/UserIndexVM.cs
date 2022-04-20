@@ -2,8 +2,8 @@
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Models
 {
-    public class PaymentCofficientIndexVM
+    public class UserIndexVM
     {
-        public List<PaymentCoefficientDTO> PaymentCofficients { get; set; }
+        public List<UserDTO> Users { get; set; }
     }
 }

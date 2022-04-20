@@ -17,10 +17,105 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
             modelBuilder.Entity("NottificationResident", b =>
                 {
@@ -37,42 +132,7 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                     b.ToTable("NottificationResident");
                 });
 
-            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.AppartmentDebt", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AppartmentId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentCoefficientId")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppartmentId");
-
-                    b.HasIndex("PaymentCoefficientId");
-
-                    b.ToTable("AppartmentDebts");
-                });
-
-            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.PaymentCoefficient", b =>
+            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.ResidentDebt", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -83,13 +143,16 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("Note")
+                    b.Property<string>("ResidentId")
                         .HasColumnType("text");
 
                     b.Property<decimal>("Value")
@@ -97,7 +160,9 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentCoefficients");
+                    b.HasIndex("ResidentId");
+
+                    b.ToTable("ResidentDebt");
                 });
 
             modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.ResidentPayment", b =>
@@ -321,6 +386,257 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                     b.ToTable("Residents");
                 });
 
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.CalculationValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("From")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentItemId")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("To")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentItemId");
+
+                    b.ToTable("CalculationValues");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.DebtItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("From")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsComplusory")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("To")
+                        .HasColumnType("date");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DebtItems");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.ResidentDebtItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("PaymentItemId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResidentId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentItemId");
+
+                    b.HasIndex("ResidentId");
+
+                    b.ToTable("ResidentDebtItems");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MktId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SurName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MktId");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUserRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NottificationResident", b =>
                 {
                     b.HasOne("ResidentalComplexManagment.Core.Entities.ResidentNotifications.Nottification", null)
@@ -336,19 +652,13 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.AppartmentDebt", b =>
+            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.ResidentDebt", b =>
                 {
-                    b.HasOne("ResidentalComplexManagment.Core.Entities.ComplexInfrastructure.Appartment", "Appartment")
+                    b.HasOne("ResidentalComplexManagment.Core.Entities.Users.Resident", "Resident")
                         .WithMany()
-                        .HasForeignKey("AppartmentId");
+                        .HasForeignKey("ResidentId");
 
-                    b.HasOne("ResidentalComplexManagment.Core.Entities.Accountment.PaymentCoefficient", "PaymentCoefficient")
-                        .WithMany()
-                        .HasForeignKey("PaymentCoefficientId");
-
-                    b.Navigation("Appartment");
-
-                    b.Navigation("PaymentCoefficient");
+                    b.Navigation("Resident");
                 });
 
             modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Accountment.ResidentPayment", b =>
@@ -387,6 +697,58 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
                     b.Navigation("Appartment");
                 });
 
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.CalculationValue", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Domain.Entities.Accountment.DebtItem", "PaymentItem")
+                        .WithMany("CalculationValues")
+                        .HasForeignKey("PaymentItemId");
+
+                    b.Navigation("PaymentItem");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.ResidentDebtItem", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Domain.Entities.Accountment.DebtItem", "PaymentItem")
+                        .WithMany()
+                        .HasForeignKey("PaymentItemId");
+
+                    b.HasOne("ResidentalComplexManagment.Core.Entities.Users.Resident", "Resident")
+                        .WithMany("ResidentDebtItems")
+                        .HasForeignKey("ResidentId");
+
+                    b.Navigation("PaymentItem");
+
+                    b.Navigation("Resident");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Core.Entities.ComplexInfrastructure.MKT", "Mkt")
+                        .WithMany()
+                        .HasForeignKey("MktId");
+
+                    b.Navigation("Mkt");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUserRole", b =>
+                {
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.ComplexInfrastructure.Appartment", b =>
                 {
                     b.Navigation("Residents");
@@ -400,6 +762,26 @@ namespace ResidentalComplexManagment.Infrastructure.Migrations
             modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.ComplexInfrastructure.MKT", b =>
                 {
                     b.Navigation("Buildings");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Core.Entities.Users.Resident", b =>
+                {
+                    b.Navigation("ResidentDebtItems");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Domain.Entities.Accountment.DebtItem", b =>
+                {
+                    b.Navigation("CalculationValues");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppRole", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("ResidentalComplexManagment.Infrastructure.IdentityEntity.AppUser", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

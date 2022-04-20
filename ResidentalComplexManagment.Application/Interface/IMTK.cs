@@ -10,5 +10,7 @@ namespace ResidentalComplexManagment.Application.Interface
     public interface IMTK : IBase<MTKDTO>
     {
         Task<List<SelectListItemDto>> GetSelectList();
+        Task<List<SelectListItemDto>> GetSelectList(string id);
+
     }
 }

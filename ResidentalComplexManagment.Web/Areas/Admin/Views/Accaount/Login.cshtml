@@ -1,0 +1,35 @@
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.LoginModel
+@{
+    Layout = "_LoginLayout";
+}
+
+<div class="container">
+    <form class="login-form form_log" method="post" asp-controller="Accaount" asp-action="Login"
+          asp-route-returnUrl="@Model.ReturnUrl">
+
+        <div class="form-group text-center">
+            <img class="w-50 mt-5" src="~/loader.png" alt="Alternate Text" />
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1" asp-for="UserName">İstifadəçinin adı</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" asp-for="UserName">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" asp-for="Password">Şifrə</label>
+            <div class="d-flex align-items-center position-relative">
+                <input type="text" class="form-control" id="exampleInputPassword1" asp-for="Password">
+                <i style="right:20px" type="button" class="show-password-toggle icon-eye-close icon-align-confirm fa fa-eye position-absolute"></i>
+            </div>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1" asp-for="RememberMe">
+            <label class="form-check-label" for="exampleCheck1" asp-for="RememberMe">Yadda saxla</label>
+        </div>
+        <button type="submit" class="btn" style="background:#13a016; color:white">Giriş</button>
+        <div class='text-danger mt-3'>
+            @Html.ValidationSummary(true)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+
+    </form>
+</div>

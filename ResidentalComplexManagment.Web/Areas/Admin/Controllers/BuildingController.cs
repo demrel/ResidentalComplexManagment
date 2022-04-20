@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 using ResidentalComplexManagment.Web.Areas.Admin.Models;
+using System.Security.Claims;
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
 {
@@ -11,20 +13,21 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
     {
         private readonly IBuilding _buildingService;
         private readonly IAppartment _appartmentService;
-
         private readonly IMTK _mtkService;
+        private readonly ICurrentUserService _currentUserService;
 
-
-        public BuildingController(IBuilding buildingService, IMTK mtkService, IAppartment appartmentService)
+        public BuildingController(IBuilding buildingService, IMTK mtkService, IAppartment appartmentService, ICurrentUserService currentUserService)
         {
             _buildingService = buildingService;
             _mtkService = mtkService;
             _appartmentService = appartmentService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var buildings = await _buildingService.GetList();
+            string userId = _currentUserService.GetNonAdminUserId;
+            var buildings = await _buildingService.GetList(userId);
             var model = new BuildingIndexVM()
             {
                 Buildings = buildings,
@@ -35,7 +38,8 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add(string mtkId)
         {
-            var mtkList = await _mtkService.GetSelectList();
+            string userId = _currentUserService.GetNonAdminUserId;
+            var mtkList = await _mtkService.GetSelectList(userId);
             BuildingAddVM buildingAddVM = new()
             {
                 Mkt = new SelectList(mtkList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), mtkId)
@@ -48,9 +52,9 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         {
 
             var building = await _buildingService.GetById(id);
-            if(building==null) return NotFound();
+            if (building == null) return NotFound();
 
-            var appartments= await _appartmentService.GetAppartmentsByBuilding(id);
+            var appartments = await _appartmentService.GetAppartmentsByBuilding(id);
             var model = new BuildingGetVM()
             {
                 Building = building,
@@ -69,10 +73,13 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(string id)
         {
+            string userId = _currentUserService.GetNonAdminUserId;
+
             var building = await _buildingService.GetById(id);
             if (building == null) return NotFound();
-            
-            var mktList = await _mtkService.GetSelectList();
+
+            var mktList = await _mtkService.GetSelectList(userId);
+
             BuildingAddVM buildingAddVM = new()
             {
                 Mkt = new SelectList(mktList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), building.MKTId),

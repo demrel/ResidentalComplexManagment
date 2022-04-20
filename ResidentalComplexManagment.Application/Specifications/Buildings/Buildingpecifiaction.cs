@@ -37,7 +37,11 @@ namespace ResidentalComplexManagment.Application.Specifications
                 MKTName = x.MKT.Name,
                 Number = x.Number,
 
-            }).Where(c=>c.MKTId==mtkId);
+            });
+            if (!string.IsNullOrEmpty(mtkId))
+            {
+                Query.Where(c => c.MKTId == mtkId);
+            }
         }
     }
 }

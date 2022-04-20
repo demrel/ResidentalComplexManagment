@@ -11,6 +11,7 @@ namespace ResidentalComplexManagment.Application.Interface
     {
         Task<List<SelectListItemDto>> GetSelectList(string mtkId);
         Task<List<BuildingDTO>> GetBuildingsByMtk(string mtkId);
+        Task<List<BuildingDTO>> GetList(string  id);
 
     }
 }

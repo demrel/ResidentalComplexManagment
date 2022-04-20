@@ -9,5 +9,9 @@ namespace ResidentalComplexManagment.Application.Interface
     public interface ICurrentUserService
     {
         string UserId { get; }
+        string UserRole { get; }
+        string GetNonAdminUserId { get; }
+        bool IsAdminRole { get; }
+
     }
 }

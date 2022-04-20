@@ -1,0 +1,222 @@
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.DebtItems.DebtItemAddVM;
+
+@{
+    ViewData["Title"] = "Ödəmə kateqoriyası əlavə et";
+}
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
+    <h2 class="h2">@ViewData["Title"]</h2>
+</div>
+<form asp-action="Update" asp-controller="debtitem" method="post">
+    <input type="text" hidden asp-for="Add.Id" />
+
+    <div class="card mb-3 px-4 shadowBox border-0  border-radius-card">
+        <h5 class="my-4 font-weight-bold">@ViewData["Title"]</h5>
+
+
+        <div class="row">
+            <div class="col-lg-3 col-12">
+                <div class="form-group">
+                    <label>Adı</label>
+                    <input type="text" class="form-control" placeholder="Adı" asp-for="Add.Name" />
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+                <div class="form-group">
+                    <label>Başlama</label>
+                    <input type="date" class="form-control" placeholder="Başlama" asp-for="Add.From" />
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+                <div class="form-group">
+                    <label>Bitmə</label>
+                    <input type="date" class="form-control" placeholder="Bitm" asp-for="Add.To" />
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-12">
+                <div class="form-group">
+                    <label for="formGroupExampleInput" class="d-block">İcbari</label>
+                    <select class="selectpicker my-select border border-radius-card" asp-for="Add.IsComplusory" data-style="btn-white" data-width="100%">
+                        <option value="True">  Bəli </option>
+                        <option value="False"> Xeyr </option>
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div id="calculation-items" class="row col-lg-12 col-12">
+                <div class="col-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="Kv-dən" asp-for="Add.CalculationValueDTO[0].From" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="Kv-kimi" asp-for="Add.CalculationValueDTO[0].To" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="number" min="0" step="0.01" class="form-control" placeholder="Qitmət" asp-for="Add.CalculationValueDTO[0].Value" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="form-group">
+                        <select class="form-control" asp-for="Add.CalculationValueDTO[0].Method" aria-label="Seçin">
+                            <option value="0"> Əmsal </option>
+                            <option value="1"> Müəyyən Qiymət </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="addElement" class="btn p-2  text-white border bg-success"> + </button>
+                </div>
+
+                @for (int i = 1; i < @Model.Add.CalculationValueDTO.Count-1; i++)
+                {
+                    <div id="@("calculationitem"+i)" class="citem row col-lg-12 col-12">
+                       <div class="col-3">
+
+                               <div class="form-group">
+                                   <input type="number" class="form-control it" placeholder="Kv-dən" name="Add.CalculationValueDTO[@i].From" />
+                               </div>
+
+                       </div>
+
+                       <div class="col-3">
+
+                               <div class="form-group">
+                                   <input type="number" class="form-control it" placeholder="Kv-kimi" name="Add.CalculationValueDTO[@i].To" />
+                               </div>
+
+                       </div>
+
+                       <div class="col-3">
+                               <div class="form-group">
+                                   <input type="number" min="0" step="0.01" class="form-control it"  placeholder="Qitmət" name="Add.CalculationValueDTO[@i].Value" />
+                               </div>
+                       </div>
+
+                       <div class="col-2">
+                           <div class="form-group">
+                               <select class="form-control it" name="Add.CalculationValueDTO[@i].Method" aria-label="Seçin">
+                                   <option value="0"> Əmsal </option>
+                                   <option value="1"> Müəyyən Qiymət </option>
+                               </select>
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                           <button type="button" onclick="Remove(this)"  class="btn p-2  text-white border bg-danger"> - </button>
+                       </div>
+                   </div>
+                }
+            </div>
+
+        </div>
+
+    </div>
+
+    <button type="submit" asp-route-redirect="Index" class="btn p-2  text-white border bg-primary">Yadda saxla Qayıt</button>
+    <a type="button" asp-action="Index" asp-controller="Debtitem" class="btn p-2  text-white border bg-primary">Imtina</a>
+</form>
+
+@section Script{
+<script>
+        var CalculationItems=document.getElementById("calculation-items")
+        var count=@Model.Add.CalculationValueDTO.Count;
+
+        document.getElementById("addElement").addEventListener("click", ()=>{
+            Add()
+        });
+
+
+
+
+       function Add(){
+           CalculationItems.insertAdjacentHTML("beforeend",Template(count))
+           count++;
+       }
+
+     function Remove(elem){
+         elem.parentNode.parentNode.remove();
+         ReorderList("citem");
+         count--;
+     }
+
+     String.prototype.replaceAtIndex = function (_index, _newValue) {
+     return this.substr(0, _index) + _newValue + this.substr(_index + _newValue.length)
+    }
+
+     function ReorderList(wraper) {
+         var calcualationItems = document.getElementsByClassName(wraper);
+         for(var i=0;i<calcualationItems.length;i++){
+             var parent=calcualationItems.item(i);
+
+             var inputs= parent.getElementsByClassName("it")
+              console.log("childrens",inputs.length)
+           for (ite of inputs){
+               var oldval=ite.name
+                var index = oldval.indexOf('[') + 1
+                ite.name =  oldval.replaceAtIndex(index, (i+1).toString())
+            }
+         }
+     }
+
+       function Template(val){
+          return  `<div id="calculationitem${val}" class="citem row col-lg-12 col-12">
+                       <div class="col-3">
+
+                               <div class="form-group">
+                                   <input type="number" class="form-control it" placeholder="Kv-dən" name="Add.CalculationValueDTO[${val}].From" />
+                               </div>
+
+                       </div>
+
+                       <div class="col-3">
+
+                               <div class="form-group">
+                                   <input type="number" class="form-control it" placeholder="Kv-kimi" name="Add.CalculationValueDTO[${val}].To" />
+                               </div>
+
+                       </div>
+
+                       <div class="col-3">
+                               <div class="form-group">
+                                   <input type="number" min="0" step="0.01" class="form-control it"  placeholder="Qitmət" name="Add.CalculationValueDTO[${val}].Value" />
+                               </div>
+                       </div>
+
+                       <div class="col-2">
+                           <div class="form-group">
+                               <select class="form-control it" name="Add.CalculationValueDTO[${val}].Method" aria-label="Seçin">
+                                   <option value="0"> Əmsal </option>
+                                   <option value="1"> Müəyyən Qiymət </option>
+                               </select>
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                           <button type="button" onclick="Remove(this)"  class="btn p-2  text-white border bg-danger"> - </button>
+                       </div>
+                   </div>`
+       }
+
+
+</script>
+}

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+
+
+    <link rel="stylesheet" href="~/css/login.css">
+
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <script src="https://kit.fontawesome.com/2d810d4f39.js" crossorigin="anonymous"></script>
+    <style>
+        .form_log {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+
+
+    @RenderSection("Style", required: false)
+</head>
+<body style="background: #F3F3F3;">
+
+
+
+    @RenderBody()
+
+
+    @*    <script src="~/admin/vendors/js/vendor.bundle.base.js"></script>
+    *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    <script src="~/js/pass.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

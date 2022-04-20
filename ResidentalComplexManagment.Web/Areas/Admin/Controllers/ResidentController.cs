@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Web.Areas.Admin.Models;
@@ -9,19 +10,22 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
     {
         private readonly IResident _residentService;
         private readonly IMTK _mtkService;
+        private readonly ICurrentUserService _currentUserService;
 
 
-        public ResidentController(IResident residentService, IMTK mtkService)
+        public ResidentController(IResident residentService, IMTK mtkService, ICurrentUserService currentUserService)
         {
             _residentService = residentService;
             _mtkService = mtkService;
+            _currentUserService = currentUserService;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var residents=await _residentService.GetList();
+            string userId = _currentUserService.GetNonAdminUserId;
+            var residents =await _residentService.GetList();
             var model = new ResidentIndexVM()
             {
                 Residents = residents,
@@ -32,7 +36,9 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var mkt = await _mtkService.GetSelectList();
+            string userId = _currentUserService.GetNonAdminUserId;
+
+            var mkt = await _mtkService.GetSelectList(userId);
             ResidentAddVM model = new()
             {
                 Mkts = mkt,

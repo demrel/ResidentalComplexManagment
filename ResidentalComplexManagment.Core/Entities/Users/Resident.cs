@@ -1,7 +1,9 @@
 ﻿using Ardalis.GuardClauses;
+using ResidentalComplexManagment.Core.Entities.Accountment;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 using ResidentalComplexManagment.Core.Entities.ResidentNotifications;
 using ResidentalComplexManagment.Core.Interface;
+using ResidentalComplexManagment.Domain.Entities.Accountment;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,10 +30,12 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public Appartment Appartment { get; private set; }
         public virtual List<Nottification> Nottifications { get; private set; }
 
-        public Resident()
-        {
 
-        }
+        private readonly List<ResidentDebtItem> _residentDebtItems = new();
+        public IReadOnlyCollection<ResidentDebtItem> ResidentDebtItems => _residentDebtItems.AsReadOnly();
+
+        public Resident() { }
+       
 
         public Resident(string name, string surname, string fIN, string phoneNumber, DateTime? birthday)
         {
@@ -62,6 +66,19 @@ namespace ResidentalComplexManagment.Core.Entities.Users
             Birthday = birthday;
         }
 
+        public void AddDebtItem(string paymentItemId, decimal discountPercent)
+        {
+            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
+            Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
+
+            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent));
+        }
+
+        public void AddDebtItem(string paymentItemId)
+        {
+            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
+            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId));
+        }
         public void ChangeRessidentStatus()
         {
             IsCurrentResident = false;

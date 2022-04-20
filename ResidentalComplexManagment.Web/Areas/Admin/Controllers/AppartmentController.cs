@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
@@ -13,19 +14,22 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         private readonly IMTK _mtkService;
         private readonly IAppartment _appartmentService;
         private readonly IResident _residentService;
+        private readonly ICurrentUserService _currentUserService;
 
 
-        public AppartmentController(IBuilding buildingService, IMTK mtkService, IAppartment appartmentService, IResident residentService)
+        public AppartmentController(IBuilding buildingService, IMTK mtkService, IAppartment appartmentService, IResident residentService, ICurrentUserService currentUserService)
         {
             _buildingService = buildingService;
             _mtkService = mtkService;
             _appartmentService = appartmentService;
             _residentService = residentService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var appartments = await _appartmentService.GetList();
+            string userId = _currentUserService.GetNonAdminUserId;
+            var appartments = await _appartmentService.GetList(userId);
             var model = new AppartmentIndexVM()
             {
                 Appartments = appartments,
@@ -56,7 +60,9 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var mkt = await _mtkService.GetSelectList();
+            string userId = _currentUserService.GetNonAdminUserId;
+
+            var mkt = await _mtkService.GetSelectList(userId);
             AppartmentAddVM AppartmentAddModel = new()
             {
                 Mkts = mkt,
@@ -80,6 +86,7 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AppartmentAddVM model,bool redirect)
         {
+
             await _appartmentService.Add(model.Add);
             if (redirect) return RedirectToAction("Index");
             else return RedirectToAction("Add");
@@ -89,8 +96,10 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(string id)
         {
+            string userId = _currentUserService.GetNonAdminUserId;
+
             var appartment = await _appartmentService.GetById(id);
-            var mktList = await _mtkService.GetSelectList();
+            var mktList = await _mtkService.GetSelectList(userId);
             var buildingList = await _buildingService.GetSelectList(appartment.MtkId);
 
             AppartmentUpdateVM apartmentUpdateModel = new()

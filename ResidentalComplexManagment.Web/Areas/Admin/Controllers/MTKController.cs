@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Web.Areas.Admin.Models;
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MTKController : BaseAdminController
     {
         private readonly IMTK _mtkService;
         private readonly IBuilding _buildingServie;
-
-
 
         public MTKController(IMTK mtkService, IBuilding buildingServie)
         {

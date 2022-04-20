@@ -15,11 +15,13 @@ namespace ResidentalComplexManagment.Application.Services
     {
         private readonly IRepository<Resident> _residentRepository;
         private readonly IRepository<Appartment> _appartmentRepository;
+        private readonly IUser _userService;
 
-        public ResidentService(IRepository<Resident> residentRepository, IRepository<Appartment> appartmentRepository)
+        public ResidentService(IRepository<Resident> residentRepository, IRepository<Appartment> appartmentRepository, IUser userService)
         {
             _residentRepository = residentRepository;
             _appartmentRepository = appartmentRepository;
+            _userService = userService;
         }
 
         public async Task Add(ResidentDTO residentDto)
@@ -49,6 +51,12 @@ namespace ResidentalComplexManagment.Application.Services
         }
 
         public async Task<List<ResidentDTO>> GetList() => await _residentRepository.ListAsync(new ResidentSpec());
+
+        public async Task<List<ResidentDTO>> GetList(string userId)
+        {
+            var user =await _userService.GetById(userId);
+            return await _residentRepository.ListAsync(new ResidentListByMtkSpec(user?.MktId));
+        }
         public async Task<List<ResidentDTO>> GetResidentsByAppartment(string id) => await _residentRepository.ListAsync(new ResidentSpec(id));
 
 
