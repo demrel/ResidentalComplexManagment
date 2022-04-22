@@ -13,5 +13,6 @@ namespace ResidentalComplexManagment.Application.Interface
         Task Update(DebtItemDTO dto);
         Task<List<DebtItemDTO>> GetList();
         Task<DebtItemDTO> GetById(string id);
+        Task<List<SelectListItemDto>> GetSelectList();
     }
 }

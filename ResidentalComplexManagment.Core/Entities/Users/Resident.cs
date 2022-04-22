@@ -74,11 +74,7 @@ namespace ResidentalComplexManagment.Core.Entities.Users
             _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent));
         }
 
-        public void AddDebtItem(string paymentItemId)
-        {
-            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId));
-        }
+   
         public void ChangeRessidentStatus()
         {
             IsCurrentResident = false;

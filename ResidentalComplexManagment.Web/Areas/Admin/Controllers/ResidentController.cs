@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Web.Areas.Admin.Models;
+using ResidentalComplexManagment.Web.Areas.Admin.Models.Residents;
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
 {
@@ -11,13 +12,16 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         private readonly IResident _residentService;
         private readonly IMTK _mtkService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IDebtItem _debtItemService;
 
 
-        public ResidentController(IResident residentService, IMTK mtkService, ICurrentUserService currentUserService)
+
+        public ResidentController(IResident residentService, IMTK mtkService, ICurrentUserService currentUserService, IDebtItem debtItemService)
         {
             _residentService = residentService;
             _mtkService = mtkService;
             _currentUserService = currentUserService;
+            _debtItemService = debtItemService;
         }
 
 
@@ -25,7 +29,7 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = _currentUserService.GetNonAdminUserId;
-            var residents =await _residentService.GetList();
+            var residents = await _residentService.GetList();
             var model = new ResidentIndexVM()
             {
                 Residents = residents,
@@ -37,7 +41,6 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Add()
         {
             string userId = _currentUserService.GetNonAdminUserId;
-
             var mkt = await _mtkService.GetSelectList(userId);
             ResidentAddVM model = new()
             {
@@ -60,11 +63,11 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ResidentAddVM model, string  redirect)
+        public async Task<IActionResult> Add(ResidentAddVM model, string redirect)
         {
             await _residentService.Add(model.Add);
             if (string.IsNullOrEmpty(redirect)) return RedirectToAction("Index");
-            else return RedirectToAction(redirect,new {id=model.Add.Id});
+            else return RedirectToAction(redirect, new { id = model.Add.Id });
         }
 
         [HttpGet]
@@ -83,7 +86,21 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Update(ResidentUpdateVM model)
         {
             await _residentService.Update(model.Add);
-            return  RedirectToAction("Index");
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddDebtItem(string residentId)
+        {
+            var debtItems = await _residentService.GetDebtItems(residentId);
+            if (debtItems == null) return NotFound();
+
+            var model = new ResidentAddDebtItemsVM()
+            {
+                DebtItems = debtItems,
+                ResidentId = residentId,
+            };
+            return View(model);
         }
     }
 }

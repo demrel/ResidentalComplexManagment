@@ -43,6 +43,11 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
             IsComplusory = isComplusory;
         }
 
+        public decimal CalcualtePrice(decimal area)
+        {
+           return  ActiveCalculationValues.Where(c => c.From <= area && c.To >= area).FirstOrDefault().Value;
+        }
+
 
         public void Update(string name, DateOnly? from, DateOnly? to, bool isComplusory)
         {

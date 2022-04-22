@@ -31,11 +31,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         }
 
-        public ResidentDebtItem(string paymentItemId)
-        {
-            Guard.Against.NullOrWhiteSpace(paymentItemId, nameof(paymentItemId));
-            PaymentItemId = paymentItemId;
-        }
+      
 
     }
 }

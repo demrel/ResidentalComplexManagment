@@ -59,6 +59,8 @@ namespace ResidentalComplexManagment.Application.Services
 
 
         public async Task<List<DebtItemDTO>> GetList() => await _debtItemRep.ListAsync(new DebtItemSpec());
+
+        public async Task<List<SelectListItemDto>> GetSelectList() => await _debtItemRep.ListAsync(new DebtItemSelectListSpec());
         public async Task<DebtItemDTO> GetById(string  id) => await _debtItemRep.GetBySpecAsync(new DebtItemSpec(id));
         
     }

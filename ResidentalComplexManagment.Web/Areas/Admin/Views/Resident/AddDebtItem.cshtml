@@ -1,0 +1,40 @@
+﻿@model ResidentalComplexManagment.Web.Areas.Admin.Models.Residents.ResidentAddDebtItemsVM;
+
+@{
+    ViewData["Title"] = "Sakinin İstifadə etdiyi Xidmətlər";
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
+</div>
+<form asp-action="Add" asp-controller="Resident" method="post">
+    <div class="card mb-3 px-4 shadowBox border-0  border-radius-card">
+        <h5 class="my-4 font-weight-bold">@ViewData["Title"]</h5>
+
+        @for (int i = 0; i < Model.DebtItems.Count; i++)
+        {
+            <div class="col-12 row ">
+                <div class="col-lg-3">
+                    <input class="form-check-input" type="checkbox" disabled="" value="@Model.DebtItems[i].IsCheckid" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        @Model.DebtItems[i].Name (Məbləğ: @Model.DebtItems[i].Price AZN)
+                    </label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="number" min="0" step="0.01" class="form-control" id="formGroupExampleInput"
+                       placeholder="FİN" value="@Model.">
+                </div>
+            </div>
+        }
+
+
+    </div>
+
+    <button type="submit" asp-route-redirect="Add" class="btn p-2  text-white border bg-primary">Yadda saxla </button>
+    <button type="submit" asp-route-redirect="Index" class="btn p-2  text-white border bg-primary">Yadda saxla Qayıt</button>
+    <a type="button" asp-action="Index" asp-controller="Resident" class="btn p-2  text-white border bg-primary">Imtina</a>
+
+</form>
+
+@section Script{
+
+}
