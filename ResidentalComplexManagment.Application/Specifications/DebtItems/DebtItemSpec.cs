@@ -45,7 +45,7 @@ namespace ResidentalComplexManagment.Application.Specifications.DebtItems
                     Value=y.Value,
                     Method=y.Method,
                 }).ToList()
-            });
+            }).Where(c=>c.Id==id);
         }
     }
 }

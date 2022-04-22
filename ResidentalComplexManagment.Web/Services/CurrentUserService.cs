@@ -22,6 +22,5 @@ namespace ResidentalComplexManagment.Web.Services
 
         public bool IsAdminRole => (bool)(User?.IsInRole("Admin"));
 
-
     }
 }

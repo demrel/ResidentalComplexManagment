@@ -22,8 +22,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         public IReadOnlyCollection<CalculationValue> CalculationValues => _calculationValues.AsReadOnly();
       
-        [NotMapped]
-        public IReadOnlyCollection<CalculationValue> ActiveCalculationValues => _calculationValues.Where(c => c.IsCurrent).ToList().AsReadOnly();
+     
 
         public DebtItem() { }
 
@@ -45,7 +44,8 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         public decimal CalcualtePrice(decimal area)
         {
-           return  ActiveCalculationValues.Where(c => c.From <= area && c.To >= area).FirstOrDefault().Value;
+           var a= CalculationValues?.Where(c => c.IsCurrent).Where(c => c.From <= area && c.To >= area).FirstOrDefault();
+            return a?.Value ?? 0;
         }
 
 

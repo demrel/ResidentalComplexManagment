@@ -89,7 +89,7 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpGet("[area]/[controller]/[action]/{residentId}")]
         public async Task<IActionResult> AddDebtItem(string residentId)
         {
             var debtItems = await _residentService.GetDebtItems(residentId);
@@ -101,6 +101,12 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
                 ResidentId = residentId,
             };
             return View(model);
+        }
+
+        public async Task<IActionResult> AddDebtItem(ResidentAddDebtItemsVM model)
+        {
+            await _residentService.AddOrRemoveDebtItems(model.DebtItems,model.ResidentId);
+            return RedirectToAction("index");
         }
     }
 }

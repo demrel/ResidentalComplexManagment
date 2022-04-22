@@ -41,6 +41,7 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task Update(DebtItemDTO dto)
         {
+            
             DebtItem data =await _debtItemRep.GetByIdAsync(dto.Id);
             data.Update(dto.Name, dto.From, dto.To, dto.IsComplusory);
 
@@ -51,7 +52,6 @@ namespace ResidentalComplexManagment.Application.Services
                 else
                     data.ChangeCalculationValue(item.Value, item.Id, item.Method);
             }
-
             await _debtItemRep.SaveChangesAsync();
         }
 

@@ -29,8 +29,6 @@ namespace ResidentalComplexManagment.Web.TagHelpers
             }
             else
                 output.Content.SetHtmlContent(content);
-
-          
         }
 
         private string ShouldBeActive()
