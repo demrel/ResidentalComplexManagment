@@ -28,6 +28,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
             Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
             PaymentItemId = paymentItemId;
             DiscountPercent = discountPercent;
+           
 
         }
 

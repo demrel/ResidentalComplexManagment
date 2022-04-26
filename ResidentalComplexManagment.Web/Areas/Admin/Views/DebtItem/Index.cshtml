@@ -9,7 +9,7 @@
     <h2 class="h2">@ViewData["Title"]</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group w-100 ">
-            <a href="/admin/debitem/add" class="btn p-2 text-white border bg-primary" type="button">Yeni Sakin yarat</a>
+            <a href="/admin/debtitem/add" class="btn p-2 text-white border bg-primary" type="button">Yeni Sakin yarat</a>
         </div>
     </div>
 </div>
@@ -53,7 +53,7 @@
                     <td class="pl-4" data-label="İcbari">@item.Type</td>
                     
                     <td class="pl-4" data-label="ACTION">
-                        <a asp-action="Update" asp-controller="Debitem" asp-route-id="@item.Id"><i class="far fa-edit"></i> </a>
+                        <a asp-action="Update" asp-controller="Debtitem" asp-route-id="@item.Id"><i class="far fa-edit"></i> </a>
                     </td>
                 </tr>
             }

@@ -20,8 +20,8 @@ namespace ResidentalComplexManagment.Application.Models
     public class CalculationValueDTO
     {
         public int Id { get; set; }
-        public decimal? From { get;  set; }
-        public decimal? To { get;  set; }
+        public decimal From { get;  set; }
+        public decimal To { get;  set; }
         public decimal Value { get;  set; }
         public CalculationMethod Method { get; set; }
     }

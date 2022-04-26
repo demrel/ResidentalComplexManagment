@@ -25,8 +25,8 @@ public class CalculationValue
 
     public CalculationValue(decimal from,decimal to,decimal value, CalculationMethod method)
     {
-        Guard.Against.NegativeOrZero(from, nameof(from));
-        Guard.Against.NegativeOrZero(to, nameof(to));
+        Guard.Against.Negative(from, nameof(from));
+        Guard.Against.Negative(to, nameof(to));
         Guard.Against.NegativeOrZero(value, nameof(value));
         From = from;
         To = to;

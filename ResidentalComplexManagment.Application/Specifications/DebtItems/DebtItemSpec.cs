@@ -37,7 +37,7 @@ namespace ResidentalComplexManagment.Application.Specifications.DebtItems
                 To = x.To,
                 IsComplusory = x.IsComplusory,
                 Type = x.Type.ToString(),
-                CalculationValueDTO= x.CalculationValues.Select(y=>new CalculationValueDTO()
+                CalculationValueDTO = x.CalculationValues.Where(c=>c.IsCurrent).Select(y=>new CalculationValueDTO()
                 {
                     Id=y.Id,
                     From=y.From,

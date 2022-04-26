@@ -22,46 +22,37 @@ namespace ResidentalComplexManagment.Application.Services
 
         public async Task Add(DebtItemDTO dto)
         {
-            DebtItem data;
-            if (dto.From != null && dto.To != null)
-                 data = new DebtItem(dto.Name, dto.From, dto.To, dto.IsComplusory);
-            else
-                 data = new DebtItem(dto.Name, dto.IsComplusory);
-
-            foreach (var item in dto.CalculationValueDTO)
-            {
-                if (dto.From!=null&&dto.To!=null)
-                    data.AddCalculationValue((decimal)item.From, (decimal)item.To, item.Value, item.Method);
-                else
-                    data.AddCalculationValue(item.Value, item.Method);
-            }
-
+            DebtItem data = new (dto.Name, dto.From, dto.To, dto.IsComplusory);
+            dto.CalculationValueDTO.ForEach(item => data.AddCalculationValue(item.From, item.To, item.Value, item.Method));
             await _debtItemRep.AddAsync(data);
         }
 
         public async Task Update(DebtItemDTO dto)
         {
-            
-            DebtItem data =await _debtItemRep.GetByIdAsync(dto.Id);
-            data.Update(dto.Name, dto.From, dto.To, dto.IsComplusory);
 
-            foreach (var item in dto.CalculationValueDTO)
-            {
-                if (dto.From != null && dto.To != null)
-                    data.ChangeCalculationValue((decimal)item.From, (decimal)item.To, item.Value, item.Id, item.Method);
-                else
-                    data.ChangeCalculationValue(item.Value, item.Id, item.Method);
-            }
+            DebtItem data = await _debtItemRep.GetBySpecAsync(new DebtItemIncludeCalcSpec(dto.Id));
+            data.Update(dto.Name, dto.From, dto.To, dto.IsComplusory);
+            dto.CalculationValueDTO.ForEach(item => data.ChangeCalculationValue(item.From, item.To, item.Value, item.Id, item.Method));
             await _debtItemRep.SaveChangesAsync();
         }
 
-        public static List<string> GetCalculationValueSelectList()=> Enum.GetNames(typeof(SelectListItemDto)).ToList();
+        public async Task<bool> MakeObsoloteCalculation(string debtItemId, int calculationId)
+        { 
+            var data = await _debtItemRep.GetBySpecAsync(new DebtItemIncludeCalcSpec(debtItemId));
+            if (data == null) return false;
+            data.MakeObsoloteCalculationItem(calculationId);
+            var changeCount= await _debtItemRep.SaveChangesAsync();
+            return changeCount > 0;
+        }
+
+        public static List<string> GetCalculationValueSelectList() => Enum.GetNames(typeof(SelectListItemDto)).ToList();
 
 
         public async Task<List<DebtItemDTO>> GetList() => await _debtItemRep.ListAsync(new DebtItemSpec());
 
         public async Task<List<SelectListItemDto>> GetSelectList() => await _debtItemRep.ListAsync(new DebtItemSelectListSpec());
-        public async Task<DebtItemDTO> GetById(string  id) => await _debtItemRep.GetBySpecAsync(new DebtItemSpec(id));
-        
+
+        public async Task<DebtItemDTO> GetById(string id) => await _debtItemRep.GetBySpecAsync(new DebtItemSpec(id));
+
     }
 }

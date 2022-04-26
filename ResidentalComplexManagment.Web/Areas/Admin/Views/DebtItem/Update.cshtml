@@ -8,6 +8,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 ">
     <h2 class="h2">@ViewData["Title"]</h2>
 </div>
+
 <form asp-action="Update" asp-controller="debtitem" method="post">
     <input type="text" hidden asp-for="Add.Id" />
 
@@ -19,6 +20,7 @@
             <div class="col-lg-3 col-12">
                 <div class="form-group">
                     <label>Adı</label>
+
                     <input type="text" class="form-control" placeholder="Adı" asp-for="Add.Name" />
                 </div>
             </div>
@@ -53,6 +55,7 @@
                 <div class="col-3">
                     <div class="form-group">
                         <div class="form-group">
+                            <input type="hidden" class="it" name="Add.CalculationValueDTO[0].Id" value="@Model.Add.CalculationValueDTO[0].Id" />
                             <input type="number" class="form-control" placeholder="Kv-dən" asp-for="Add.CalculationValueDTO[0].From" />
                         </div>
                     </div>
@@ -87,44 +90,46 @@
                     <button type="button" id="addElement" class="btn p-2  text-white border bg-success"> + </button>
                 </div>
 
-                @for (int i = 1; i < @Model.Add.CalculationValueDTO.Count-1; i++)
+                @for (int i = 1; i < @Model.Add.CalculationValueDTO.Count; i++)
                 {
                     <div id="@("calculationitem"+i)" class="citem row col-lg-12 col-12">
-                       <div class="col-3">
 
-                               <div class="form-group">
-                                   <input type="number" class="form-control it" placeholder="Kv-dən" name="Add.CalculationValueDTO[@i].From" />
-                               </div>
+                        <div class="col-3">
 
-                       </div>
+                            <div class="form-group">
+                                <input type="hidden" class="it" name="Add.CalculationValueDTO[@i].Id" value="@Model.Add.CalculationValueDTO[@i].Id" />
+                                <input type="number" class="form-control it" placeholder="Kv-dən" name="Add.CalculationValueDTO[@i].From" value="@Model.Add.CalculationValueDTO[@i].From" />
+                            </div>
 
-                       <div class="col-3">
+                        </div>
 
-                               <div class="form-group">
-                                   <input type="number" class="form-control it" placeholder="Kv-kimi" name="Add.CalculationValueDTO[@i].To" />
-                               </div>
+                        <div class="col-3">
 
-                       </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control it" placeholder="Kv-kimi" name="Add.CalculationValueDTO[@i].To" value="@Model.Add.CalculationValueDTO[@i].To" />
+                            </div>
 
-                       <div class="col-3">
-                               <div class="form-group">
-                                   <input type="number" min="0" step="0.01" class="form-control it"  placeholder="Qitmət" name="Add.CalculationValueDTO[@i].Value" />
-                               </div>
-                       </div>
+                        </div>
 
-                       <div class="col-2">
-                           <div class="form-group">
-                               <select class="form-control it" name="Add.CalculationValueDTO[@i].Method" aria-label="Seçin">
-                                   <option value="0"> Əmsal </option>
-                                   <option value="1"> Müəyyən Qiymət </option>
-                               </select>
-                           </div>
-                       </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <input type="number" min="0" step="0.01" class="form-control it" placeholder="Qitmət" name="Add.CalculationValueDTO[@i].Value" value="@Model.Add.CalculationValueDTO[@i].Value" />
+                            </div>
+                        </div>
 
-                       <div class="form-group">
-                           <button type="button" onclick="Remove(this)"  class="btn p-2  text-white border bg-danger"> - </button>
-                       </div>
-                   </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <select class="form-control it" name="Add.CalculationValueDTO[@i].Method" aria-label="Seçin">
+                                    <!option @((int)Model.Add.CalculationValueDTO[i].Method==0?"selected":"") value="0"> Əmsal </!option>
+                                    <!option @((int)Model.Add.CalculationValueDTO[i].Method==1?"selected":"") value="1"> Müəyyən Qiymət </!option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" onclick="Remove(this)" data-calcid="@Model.Add.CalculationValueDTO[@i].Id" data-id="@Model.Add.Id" class="btn p-2  text-white border bg-danger"> - </button>
+                        </div>
+                    </div>
                 }
             </div>
 
@@ -153,11 +158,19 @@
            count++;
        }
 
-     function Remove(elem){
+       async function Remove(elem) {
+        var calcId = elem.dataset.calcid
+        var id = elem.dataset.id
+        console.log(`debtItemId=${id}&calculationItemId=${calcId}`)
+        
+         if(calcId!=='undefined' && id!=='undefined')
+            var response =  await fetch(`/admin/debtitem/MakeObsoloteCalculation?debtItemId=${id}&calculationItemId=${calcId}`);
+        
+
          elem.parentNode.parentNode.remove();
          ReorderList("citem");
          count--;
-     }
+       }
 
      String.prototype.replaceAtIndex = function (_index, _newValue) {
      return this.substr(0, _index) + _newValue + this.substr(_index + _newValue.length)

@@ -19,10 +19,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
         public PaymentItemType Type { get; private set; }
 
         private readonly List<CalculationValue> _calculationValues = new();
-
         public IReadOnlyCollection<CalculationValue> CalculationValues => _calculationValues.AsReadOnly();
-      
-     
 
         public DebtItem() { }
 
@@ -44,8 +41,14 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         public decimal CalcualtePrice(decimal area)
         {
-           var a= CalculationValues?.Where(c => c.IsCurrent).Where(c => c.From <= area && c.To >= area).FirstOrDefault();
-            return a?.Value ?? 0;
+           var calculation= CalculationValues?.Where(c => c.IsCurrent).Where(c => c.From <= area && c.To >= area).FirstOrDefault();
+
+            return  calculation switch
+            {
+                null => 0,
+                { Method: CalculationMethod.Coefficient}=> calculation.Value * area,
+                _  => calculation.Value,
+            };
         }
 
 
@@ -62,21 +65,18 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         public void AddCalculationValue(decimal from, decimal to, decimal value, CalculationMethod method)
         {
-            _calculationValues.Add(new CalculationValue(from, to, value,method));
+            _calculationValues.Add(new CalculationValue(from, to, value, method));
         }
-        public void AddCalculationValue(decimal value, CalculationMethod method)
-        {
-            _calculationValues.Add(new CalculationValue(value,method));
-        }
-        public void ChangeCalculationValue(decimal value, int id, CalculationMethod method)
-        {
-            _calculationValues.FirstOrDefault(c => c.Id == id)?.MakeObsolote();
-            AddCalculationValue(value, method);
-        }
+
         public void ChangeCalculationValue(decimal from, decimal to, decimal value, int id, CalculationMethod method)
         {
-            _calculationValues.FirstOrDefault(c => c.Id == id)?.MakeObsolote();
+            MakeObsoloteCalculationItem(id);
             AddCalculationValue(from, to, value, method);
+        }
+
+        public void MakeObsoloteCalculationItem(int id)
+        {
+            CalculationValues.FirstOrDefault(c => c.Id == id)?.MakeObsolote();
         }
     }
 }

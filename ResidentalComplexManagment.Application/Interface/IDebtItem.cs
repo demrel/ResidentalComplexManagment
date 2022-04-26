@@ -14,5 +14,6 @@ namespace ResidentalComplexManagment.Application.Interface
         Task<List<DebtItemDTO>> GetList();
         Task<DebtItemDTO> GetById(string id);
         Task<List<SelectListItemDto>> GetSelectList();
+        Task<bool> MakeObsoloteCalculation(string debtItemId, int calculationId);
     }
 }

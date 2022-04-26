@@ -103,6 +103,7 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> AddDebtItem(ResidentAddDebtItemsVM model)
         {
             await _residentService.AddOrRemoveDebtItems(model.DebtItems,model.ResidentId);

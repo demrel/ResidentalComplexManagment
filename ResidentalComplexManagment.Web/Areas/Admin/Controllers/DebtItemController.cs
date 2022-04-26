@@ -42,7 +42,7 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Update(string id)
         {
             var data = await _debItemService.GetById(id);
-            DebtItemAddVM model = new DebtItemAddVM()
+            DebtItemAddVM model = new ()
             {
                 Add = data,
             };
@@ -54,6 +54,13 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         {
             await _debItemService.Update(model.Add);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MakeObsoloteCalculation(string debtItemId,int calculationItemId)
+        {
+          var response =  await _debItemService.MakeObsoloteCalculation(debtItemId, calculationItemId);
+            return Ok(response?"removed":"notRemoved");
         }
 
     }

@@ -16,5 +16,11 @@ namespace ResidentalComplexManagment.Application.Specifications.DebtItems
             Query.Include(c => c.CalculationValues);
             
         }
+
+        public DebtItemIncludeCalcSpec(string id)
+        {
+            Query.Include(c => c.CalculationValues).Where(c=>c.Id==id);
+
+        }
     }
 }

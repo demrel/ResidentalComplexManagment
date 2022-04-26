@@ -74,6 +74,14 @@ namespace ResidentalComplexManagment.Core.Entities.Users
             _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent));
         }
 
+        public void EditDebtItem(string paymentItemId, decimal discountPercent, int id)
+        {
+            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
+            Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
+           
+            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent, id));
+        }
+
         public void RemoveDebtItem(string paymentItemId)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
