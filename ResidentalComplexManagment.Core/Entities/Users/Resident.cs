@@ -34,6 +34,9 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         private readonly List<ResidentDebtItem> _residentDebtItems = new();
         public IReadOnlyCollection<ResidentDebtItem> ResidentDebtItems => _residentDebtItems.AsReadOnly();
 
+        private readonly List<ResidentDebtItemDiscount> _residentDiscounts = new();
+        public IReadOnlyCollection<ResidentDebtItemDiscount> ResidentDiscounts => _residentDiscounts.AsReadOnly();
+
         public Resident() { }
 
 
@@ -66,30 +69,43 @@ namespace ResidentalComplexManagment.Core.Entities.Users
             Birthday = birthday;
         }
 
-        public void AddDebtItem(string paymentItemId, decimal discountPercent)
+        public void AddDebtItem(string paymentItemId)
+        {
+            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
+            var oldDebtItem = _residentDebtItems.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+            if(oldDebtItem != null) oldDebtItem.MakeObsolote();
+            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId));
+        }
+
+        public void RemoveDebtItem(string  id)
+        {
+            Guard.Against.NullOrEmpty(id, nameof(id));
+            _residentDebtItems.FirstOrDefault(c => c.PaymentItemId == id)?.MakeObsolote();
+        }
+
+        public void AddDiscount(string paymentItemId, decimal discountPercent,string description)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
             Guard.Against.Negative(discountPercent, nameof(discountPercent));
+            var oldDiscount = _residentDiscounts.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+          
+            if (oldDiscount?.DiscountPercent != discountPercent)
+            {
+                oldDiscount.MakeObsolote();
+                _residentDiscounts.Add(new ResidentDebtItemDiscount(paymentItemId, discountPercent));
+            }
 
-            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent));
+            if (oldDiscount.Description != description)
+                oldDiscount.Change(description);
+            
+
         }
 
-        public void EditDebtItem(decimal discountPercent, int id)
-        {
-            Guard.Against.NegativeOrZero(id, nameof(id));
-            Guard.Against.Negative(discountPercent, nameof(discountPercent));
-            var debtitem = ResidentDebtItems.FirstOrDefault(c => c.Id == id);
-            if (debtitem == null) return;
-            debtitem.Edit(discountPercent);
-        }
 
-        public void RemoveDebtItem(int id)
-        {
-            Guard.Against.NegativeOrZero(id, nameof(id));
-           // _residentDebtItems.Remove(_residentDebtItems.FirstOrDefault(c => c.PaymentItemId == paymentItemId));
-            var item = _residentDebtItems.FirstOrDefault(c => c.Id == id);
-            _residentDebtItems.Remove(item);
-        }
+
+       
+
+
 
 
         public void ChangeRessidentStatus()

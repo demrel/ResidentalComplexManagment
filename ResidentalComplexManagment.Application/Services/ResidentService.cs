@@ -6,11 +6,6 @@ using ResidentalComplexManagment.Application.Specifications.Residents;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 using ResidentalComplexManagment.Core.Entities.Users;
 using ResidentalComplexManagment.Domain.Entities.Accountment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ResidentalComplexManagment.Application.Services
 {
@@ -84,28 +79,22 @@ namespace ResidentalComplexManagment.Application.Services
             };
         }
 
-        //public async Task AddDebtItems(List<ResidentDebtItemDTO> ids, string residentId)
-        //{
-
-        //    var resident = await _residentRepository.GetByIdAsync(residentId);
-        //    if (resident == null && !resident.IsCurrentResident) return;
-        //    foreach (var item in ids)
-        //    {
-        //        resident.AddDebtItem(item.PaymentItemId, item.DiscountPercent);
-        //    }
-        //}
-
         public async Task<List<ResidentDebtItemDTOListItem>> GetDebtItems(string residentId)
         {
             var resident = await _residentRepository.GetBySpecAsync(new ResidentIncludeDebItemAndAppartment(residentId));
             if (resident == null || !resident.IsCurrentResident) return null;
 
-            var paymentItemIdList = resident.ResidentDebtItems.ToDictionary(b => b.PaymentItemId, b => (b.Id, b.DiscountPercent));
-
+            //   var paymentItemIdList = resident.ResidentDebtItems.ToDictionary(b => b.PaymentItemId, b => (b.Id, b.DiscountPercent));
+            var paymentItemIdList = resident.ResidentDebtItems.Join(resident.ResidentDiscounts, de => de.PaymentItemId, di => di.PaymentItemId, (de, di) => new
+            {
+                de,
+                di
+            }).ToDictionary(ob => ob.de.PaymentItemId, ob => (ob.di.DiscountPercent, ob.di.Description));
+            
             var debtitems = await _debItemRepository.ListAsync(new DebtItemIncludeCalcSpec());
             return debtitems.Select(item => new ResidentDebtItemDTOListItem()
             {
-                Id = paymentItemIdList.GetValueOrDefault(item.Id).Id,
+               // Id = paymentItemIdList.GetValueOrDefault(item.Id).Id,
                 Name = item.Name,
                 IsComplusory = item.IsComplusory,
                 IsCheckid = item.IsComplusory || paymentItemIdList.ContainsKey(item.Id),
@@ -119,25 +108,19 @@ namespace ResidentalComplexManagment.Application.Services
         {
             var resident = await _residentRepository.GetBySpecAsync(new ResidentIncludeDebItemAndAppartment(residentId));
             if (resident == null || !resident.IsCurrentResident) return;
-          
+            
             foreach (var item in residentDebtItems)
             {
-                if (item.Id != 0 && ((item.IsComplusory && item.Discount == 0) || (!item.IsCheckid && !item.IsComplusory)))
-                    resident.RemoveDebtItem(item.Id);
-                else if (item.Id != 0 && item.IsCheckid) resident.EditDebtItem(item.Discount, item.Id);
-                else if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId, item.Discount);
+                if (!item.IsComplusory)
+                {
+                    if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId);
+                    else resident.RemoveDebtItem(item.PaymentItemId);
+                }
+
+                if (item.Discount>=0) resident.AddDiscount(item.PaymentItemId, item.Discount,item.Description);
             }
-            var a = resident;
+
             await _residentRepository.SaveChangesAsync();
-          //  await _residentRepository.UpdateAsync(resident);
         }
-
-
-
-        //public async Task RemoveDebtItems(List<ResidentDebtItemDTO> ids, string residentId)
-        //{
-
-        //}
-
     }
 }
