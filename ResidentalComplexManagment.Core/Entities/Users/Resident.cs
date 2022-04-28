@@ -16,9 +16,9 @@ namespace ResidentalComplexManagment.Core.Entities.Users
 {
     public class Resident : BaseEntity, IAggregateRoot
     {
-        public string Name { get;private set; }
+        public string Name { get; private set; }
         public string Surname { get; private set; }
-        public string FullName => Name +" "+ Surname;
+        public string FullName => Name + " " + Surname;
         public string FIN { get; private set; }
         public string PhoneNumber { get; private set; }
 
@@ -35,7 +35,7 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public IReadOnlyCollection<ResidentDebtItem> ResidentDebtItems => _residentDebtItems.AsReadOnly();
 
         public Resident() { }
-       
+
 
         public Resident(string name, string surname, string fIN, string phoneNumber, DateTime? birthday)
         {
@@ -69,24 +69,26 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public void AddDebtItem(string paymentItemId, decimal discountPercent)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-            Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
+            Guard.Against.Negative(discountPercent, nameof(discountPercent));
 
             _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent));
         }
 
-        public void EditDebtItem(string paymentItemId, decimal discountPercent, int id)
+        public void EditDebtItem(decimal discountPercent, int id)
         {
-            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-            Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
-           
-            _residentDebtItems.Add(new ResidentDebtItem(paymentItemId, discountPercent, id));
+            Guard.Against.NegativeOrZero(id, nameof(id));
+            Guard.Against.Negative(discountPercent, nameof(discountPercent));
+            var debtitem = ResidentDebtItems.FirstOrDefault(c => c.Id == id);
+            if (debtitem == null) return;
+            debtitem.Edit(discountPercent);
         }
 
-        public void RemoveDebtItem(string paymentItemId)
+        public void RemoveDebtItem(int id)
         {
-            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-
-            _residentDebtItems.Remove(_residentDebtItems.FirstOrDefault(c=>c.PaymentItemId==paymentItemId));
+            Guard.Against.NegativeOrZero(id, nameof(id));
+           // _residentDebtItems.Remove(_residentDebtItems.FirstOrDefault(c => c.PaymentItemId == paymentItemId));
+            var item = _residentDebtItems.FirstOrDefault(c => c.Id == id);
+            _residentDebtItems.Remove(item);
         }
 
 

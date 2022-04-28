@@ -12,9 +12,9 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
     {
         public int Id { get; set; }
         public string  ResidentId { get; private set; }
-        public Resident Resident { get; private set; }
+        //public Resident Resident { get; private set; }
         public string PaymentItemId { get; private set; }
-        public DebtItem PaymentItem { get; private set; }
+        //public DebtItem PaymentItem { get; private set; }
         public decimal DiscountPercent { get; private set; }
         public bool HasDisocunt => DiscountPercent > 0;
 
@@ -25,11 +25,15 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
         public ResidentDebtItem(string paymentItemId,decimal discountPercent)
         {
             Guard.Against.NullOrWhiteSpace(paymentItemId, nameof(paymentItemId));
-            Guard.Against.NegativeOrZero(discountPercent, nameof(discountPercent));
+            Guard.Against.Negative(discountPercent, nameof(discountPercent));
             PaymentItemId = paymentItemId;
             DiscountPercent = discountPercent;
-           
+        }
 
+        public void Edit(decimal discountPercent)
+        {
+            Guard.Against.Negative(discountPercent, nameof(discountPercent));
+            DiscountPercent = discountPercent;
         }
 
       

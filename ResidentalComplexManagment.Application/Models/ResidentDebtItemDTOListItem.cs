@@ -10,7 +10,7 @@ namespace ResidentalComplexManagment.Application.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsDisabled { get; set; }
+        public bool IsComplusory { get; set; }
         public bool IsCheckid { get; set; }
         public decimal Price { get; set; }
         public decimal Discount { get; set; }

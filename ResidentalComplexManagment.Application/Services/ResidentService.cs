@@ -105,9 +105,9 @@ namespace ResidentalComplexManagment.Application.Services
             var debtitems = await _debItemRepository.ListAsync(new DebtItemIncludeCalcSpec());
             return debtitems.Select(item => new ResidentDebtItemDTOListItem()
             {
-                Id=paymentItemIdList.GetValueOrDefault(item.Id).Id,
+                Id = paymentItemIdList.GetValueOrDefault(item.Id).Id,
                 Name = item.Name,
-                IsDisabled = item.IsComplusory,
+                IsComplusory = item.IsComplusory,
                 IsCheckid = item.IsComplusory || paymentItemIdList.ContainsKey(item.Id),
                 Price = item.CalcualtePrice(resident.Appartment.Area),
                 Discount = paymentItemIdList.GetValueOrDefault(item.Id).DiscountPercent,
@@ -119,14 +119,17 @@ namespace ResidentalComplexManagment.Application.Services
         {
             var resident = await _residentRepository.GetBySpecAsync(new ResidentIncludeDebItemAndAppartment(residentId));
             if (resident == null || !resident.IsCurrentResident) return;
-            var data = residentDebtItems.Where(c => !c.IsDisabled||c.Discount>0);
-            foreach (var item in data)
+          
+            foreach (var item in residentDebtItems)
             {
-                if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId, item.Discount, item.Id);
-                else if (item.Id != 0 && item.IsCheckid) resident.
-                else resident.RemoveDebtItem(item.PaymentItemId);
+                if (item.Id != 0 && ((item.IsComplusory && item.Discount == 0) || (!item.IsCheckid && !item.IsComplusory)))
+                    resident.RemoveDebtItem(item.Id);
+                else if (item.Id != 0 && item.IsCheckid) resident.EditDebtItem(item.Discount, item.Id);
+                else if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId, item.Discount);
             }
+            var a = resident;
             await _residentRepository.SaveChangesAsync();
+          //  await _residentRepository.UpdateAsync(resident);
         }
 
 
