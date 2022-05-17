@@ -19,18 +19,12 @@ namespace UnitTests.Application
         private readonly string _buyerId = "Test buyerId";
         private readonly Mock<IMTK> _mockBasketRepo = new();
 
-    
-            
-
         [Fact]
         public void Add()
         {
-          var dto=  new MTKDTO() { Address = "testaddress", Name = "TestName", IBAN = "testIban", PhoneNumber = "testPhoneNumber" };
-            var basket = new MKT("TestName","testIban","testaddress","testPhoneNumber");
-
+            var dto = new MTKDTO() { Address = "testaddress", Name = "TestName", IBAN = "testIban", PhoneNumber = "testPhoneNumber" };
+            var basket = new MKT("TestName", "testIban", "testaddress", "testPhoneNumber");
             _mockBasketRepo.Setup(x => x.Add(dto));
-
-           
         }
     }
 }
