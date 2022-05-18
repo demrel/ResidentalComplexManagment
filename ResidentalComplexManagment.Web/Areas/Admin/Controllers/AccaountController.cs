@@ -31,8 +31,6 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
             return View();
         }
 
-     
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

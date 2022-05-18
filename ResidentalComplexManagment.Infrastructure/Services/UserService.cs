@@ -35,7 +35,6 @@ namespace ResidentalComplexManagment.Infrastructure.Services
             };
 
             await _userManager.CreateAsync(user, password);
-          
             await _userManager.AddToRoleAsync(user, userDTO.Role);
         }
         public async Task SeedRoles()
