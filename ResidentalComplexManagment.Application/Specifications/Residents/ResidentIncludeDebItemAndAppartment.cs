@@ -13,8 +13,9 @@ namespace ResidentalComplexManagment.Application.Specifications.Residents
         public ResidentIncludeDebItemAndAppartment(string id)
         {
             Query.Include(c => c.ResidentDebtItems)
-                .Include(c=>c.Appartment)
-                .Where(c=>c.Id==id);
+                 .Include(c=>c.Appartment)
+                 .Include(c=>c.ResidentDiscounts)
+                 .Where(c=>c.Id==id);
         }
     }
 }

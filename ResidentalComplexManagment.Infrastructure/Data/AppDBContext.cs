@@ -37,17 +37,17 @@ namespace ResidentalComplexManagment.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<ResidentDebtItem>(residentDebtItem =>
-            {
-                residentDebtItem.HasKey(rd => new { rd.ResidentId, rd.PaymentItemId });
+            //builder.Entity<ResidentDebtItem>(residentDebtItem =>
+            //{
+            //    residentDebtItem.HasKey(rd => new { rd.ResidentId, rd.PaymentItemId });
 
-                //residentDebtItem.HasOne(rd => rd.Resident)
-                //       .WithMany(r => r.ResidentDebtItems)
-                //       .HasForeignKey(r => r.ResidentId)
-                //       .IsRequired();
+            //    //residentDebtItem.HasOne(rd => rd.Resident)
+            //    //       .WithMany(r => r.ResidentDebtItems)
+            //    //       .HasForeignKey(r => r.ResidentId)
+            //    //       .IsRequired();
 
                 
-            });
+            //});
 
             builder.Entity<AppUserRole>(userRole =>
             {

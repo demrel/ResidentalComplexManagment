@@ -2,6 +2,7 @@
 using ResidentalComplexManagment.Core.Entities.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 {
     public class ResidentDebtItem
     {
+        [Key]
         public int Id { get; set; }
         public string ResidentId { get; private set; }
         //public Resident Resident { get; private set; }

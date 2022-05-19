@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 {
     public class ResidentDebtItemDiscount
     {
+        [Key]
         public int Id { get; set; }
         public string ResidentId { get; private set; }
         //public Resident Resident { get; private set; }
@@ -23,13 +25,14 @@ namespace ResidentalComplexManagment.Domain.Entities.Accountment
 
         public ResidentDebtItemDiscount() { }
 
-        public ResidentDebtItemDiscount(string paymentItemId, decimal discountPercent)
+        public ResidentDebtItemDiscount(string paymentItemId, decimal discountPercent,string description)
         {
             Guard.Against.NullOrWhiteSpace(paymentItemId, nameof(paymentItemId));
             Guard.Against.Negative(discountPercent, nameof(discountPercent));
             PaymentItemId = paymentItemId;
             DiscountPercent = discountPercent;
             IsActive = true;
+            Description=description;
             StartDate = DateOnly.FromDateTime(DateTime.UtcNow);
         }
 

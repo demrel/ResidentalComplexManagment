@@ -15,8 +15,8 @@
         @for (int i = 0; i < Model.DebtItems.Count; i++)
         {
             <div class="col-12 row ">
-                <div class="col-lg-3 mb-4">
-                    
+                <div class="col-3 mb-4">
+
 
                     @if (Model.DebtItems[i].IsComplusory)
                     {
@@ -30,10 +30,22 @@
                         @Model.DebtItems[i].Name (Məbləğ: @Model.DebtItems[i].Price AZN)
                     </label>
                 </div>
-                <div class="col-lg-3">
-                    <input type="hidden" asp-for="DebtItems[i].IsComplusory" >
+                <div class="col-2">
+                    <input type="hidden" asp-for="DebtItems[i].IsComplusory">
                     <input type="hidden" asp-for="DebtItems[i].PaymentItemId">
-                    <input type="number" min="0" step="0.01" class="form-control" placeholder="Endirim Faizi" asp-for="DebtItems[i].Discount">
+
+@*                    <input type="number" min="0" step="0.01" class="form-control" placeholder="Endirim Faizi" asp-for="DebtItems[i].Discount">
+*@
+                    <div class="input-group">
+                        <input type="text" min="0" step="0.01" class="form-control" placeholder="Endirim Faizi" aria-label="Recipient's username" aria-describedby="basic-addon2" asp-for="DebtItems[i].Discount">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <input type="text" placeholder="İzah" class="form-control" asp-for="DebtItems[i].Description" />
                 </div>
             </div>
         }

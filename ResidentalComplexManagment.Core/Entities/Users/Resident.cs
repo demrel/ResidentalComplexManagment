@@ -73,39 +73,46 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
             var oldDebtItem = _residentDebtItems.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
-            if(oldDebtItem != null) oldDebtItem.MakeObsolote();
+            if (oldDebtItem != null) oldDebtItem.MakeObsolote();
             _residentDebtItems.Add(new ResidentDebtItem(paymentItemId));
         }
 
-        public void RemoveDebtItem(string  id)
+        public void RemoveDebtItem(string id)
         {
             Guard.Against.NullOrEmpty(id, nameof(id));
             _residentDebtItems.FirstOrDefault(c => c.PaymentItemId == id)?.MakeObsolote();
         }
 
-        public void AddDiscount(string paymentItemId, decimal discountPercent,string description)
+        public void AddDiscount(string paymentItemId, decimal discountPercent, string description)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
             Guard.Against.Negative(discountPercent, nameof(discountPercent));
             var oldDiscount = _residentDiscounts.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
-          
+
+
+            if (oldDiscount == null)
+            {
+                _residentDiscounts.Add(new ResidentDebtItemDiscount(paymentItemId, discountPercent, description));
+                return;
+            }
+
             if (oldDiscount?.DiscountPercent != discountPercent)
             {
                 oldDiscount.MakeObsolote();
-                _residentDiscounts.Add(new ResidentDebtItemDiscount(paymentItemId, discountPercent));
+                _residentDiscounts.Add(new ResidentDebtItemDiscount(paymentItemId, discountPercent, description));
+                return;
             }
 
-            if (oldDiscount.Description != description)
+            if(oldDiscount.Description != description) 
                 oldDiscount.Change(description);
-            
-
         }
 
-
-
-       
-
-
+        public void RemoveDiscount(string paymentItemId)
+        {
+            Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
+            var a= _residentDiscounts.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+            a?.MakeObsolote();
+        }
 
 
         public void ChangeRessidentStatus()

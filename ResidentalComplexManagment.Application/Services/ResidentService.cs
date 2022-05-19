@@ -84,22 +84,19 @@ namespace ResidentalComplexManagment.Application.Services
             var resident = await _residentRepository.GetBySpecAsync(new ResidentIncludeDebItemAndAppartment(residentId));
             if (resident == null || !resident.IsCurrentResident) return null;
 
-            //   var paymentItemIdList = resident.ResidentDebtItems.ToDictionary(b => b.PaymentItemId, b => (b.Id, b.DiscountPercent));
-            var paymentItemIdList = resident.ResidentDebtItems.Join(resident.ResidentDiscounts, de => de.PaymentItemId, di => di.PaymentItemId, (de, di) => new
-            {
-                de,
-                di
-            }).ToDictionary(ob => ob.de.PaymentItemId, ob => (ob.di.DiscountPercent, ob.di.Description));
+            var debtItemDict = resident.ResidentDebtItems?.Where(c => c.IsActive).ToDictionary(debitem => debitem.PaymentItemId, debitem => debitem);
+            var discountDict = resident.ResidentDiscounts?.Where(c=>c.IsActive).ToDictionary(discount => discount.PaymentItemId, discount => discount);
+
             
             var debtitems = await _debItemRepository.ListAsync(new DebtItemIncludeCalcSpec());
             return debtitems.Select(item => new ResidentDebtItemDTOListItem()
-            {
-               // Id = paymentItemIdList.GetValueOrDefault(item.Id).Id,
+            { 
                 Name = item.Name,
                 IsComplusory = item.IsComplusory,
-                IsCheckid = item.IsComplusory || paymentItemIdList.ContainsKey(item.Id),
+                IsCheckid = item.IsComplusory || ( debtItemDict.GetValueOrDefault(item.Id)?.IsActive??false),
                 Price = item.CalcualtePrice(resident.Appartment.Area),
-                Discount = paymentItemIdList.GetValueOrDefault(item.Id).DiscountPercent,
+                Description= discountDict?.GetValueOrDefault(item.Id)?.Description??"",
+                Discount = discountDict?.GetValueOrDefault(item.Id)?.DiscountPercent??0,
                 PaymentItemId = item.Id,
             }).ToList();
         }
@@ -114,10 +111,15 @@ namespace ResidentalComplexManagment.Application.Services
                 if (!item.IsComplusory)
                 {
                     if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId);
-                    else resident.RemoveDebtItem(item.PaymentItemId);
+                    else {
+                        resident.RemoveDebtItem(item.PaymentItemId);
+                        resident.RemoveDiscount(item.PaymentItemId);
+                    }
+                    
                 }
 
-                if (item.Discount>=0) resident.AddDiscount(item.PaymentItemId, item.Discount,item.Description);
+                if (item.Discount > 0) resident.AddDiscount(item.PaymentItemId, item.Discount, item.Description);
+                else resident.RemoveDiscount(item.PaymentItemId);
             }
 
             await _residentRepository.SaveChangesAsync();
