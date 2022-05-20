@@ -72,22 +72,26 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public void AddDebtItem(string paymentItemId)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-            var oldDebtItem = _residentDebtItems.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
-            if (oldDebtItem != null) oldDebtItem.MakeObsolote();
+            var oldDebtItem = _residentDebtItems.OrderByDescending(c=>c.Id).Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+            if (oldDebtItem!=null)
+            {
+                if (oldDebtItem.IsActive == true) return;
+                oldDebtItem.MakeObsolote();
+            }
             _residentDebtItems.Add(new ResidentDebtItem(paymentItemId));
         }
 
         public void RemoveDebtItem(string id)
         {
             Guard.Against.NullOrEmpty(id, nameof(id));
-            _residentDebtItems.FirstOrDefault(c => c.PaymentItemId == id)?.MakeObsolote();
+            _residentDebtItems.OrderByDescending(c => c.Id).FirstOrDefault(c => c.PaymentItemId == id)?.MakeObsolote();
         }
 
         public void AddDiscount(string paymentItemId, decimal discountPercent, string description)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
             Guard.Against.Negative(discountPercent, nameof(discountPercent));
-            var oldDiscount = _residentDiscounts.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+            var oldDiscount = _residentDiscounts.Where(c=>c.IsActive).Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
 
 
             if (oldDiscount == null)
@@ -110,7 +114,7 @@ namespace ResidentalComplexManagment.Core.Entities.Users
         public void RemoveDiscount(string paymentItemId)
         {
             Guard.Against.NullOrEmpty(paymentItemId, nameof(paymentItemId));
-            var a= _residentDiscounts.Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
+            var a= _residentDiscounts.Where(c => c.IsActive).Where(c => c.PaymentItemId == paymentItemId).FirstOrDefault();
             a?.MakeObsolote();
         }
 

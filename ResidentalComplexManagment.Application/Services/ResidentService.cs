@@ -85,18 +85,18 @@ namespace ResidentalComplexManagment.Application.Services
             if (resident == null || !resident.IsCurrentResident) return null;
 
             var debtItemDict = resident.ResidentDebtItems?.Where(c => c.IsActive).ToDictionary(debitem => debitem.PaymentItemId, debitem => debitem);
-            var discountDict = resident.ResidentDiscounts?.Where(c=>c.IsActive).ToDictionary(discount => discount.PaymentItemId, discount => discount);
+            var discountDict = resident.ResidentDiscounts?.Where(c => c.IsActive).ToDictionary(discount => discount.PaymentItemId, discount => discount);
 
-            
+
             var debtitems = await _debItemRepository.ListAsync(new DebtItemIncludeCalcSpec());
             return debtitems.Select(item => new ResidentDebtItemDTOListItem()
-            { 
+            {
                 Name = item.Name,
                 IsComplusory = item.IsComplusory,
-                IsCheckid = item.IsComplusory || ( debtItemDict.GetValueOrDefault(item.Id)?.IsActive??false),
+                IsCheckid = item.IsComplusory || (debtItemDict.GetValueOrDefault(item.Id)?.IsActive ?? false),
                 Price = item.CalcualtePrice(resident.Appartment.Area),
-                Description= discountDict?.GetValueOrDefault(item.Id)?.Description??"",
-                Discount = discountDict?.GetValueOrDefault(item.Id)?.DiscountPercent??0,
+                Description = discountDict?.GetValueOrDefault(item.Id)?.Description ?? "",
+                Discount = discountDict?.GetValueOrDefault(item.Id)?.DiscountPercent ?? 0,
                 PaymentItemId = item.Id,
             }).ToList();
         }
@@ -105,20 +105,23 @@ namespace ResidentalComplexManagment.Application.Services
         {
             var resident = await _residentRepository.GetBySpecAsync(new ResidentIncludeDebItemAndAppartment(residentId));
             if (resident == null || !resident.IsCurrentResident) return;
-            
+
             foreach (var item in residentDebtItems)
             {
                 if (!item.IsComplusory)
                 {
-                    if (item.IsCheckid) resident.AddDebtItem(item.PaymentItemId);
-                    else {
+                    if (item.IsCheckid)
+                    {
+                        resident.AddDebtItem(item.PaymentItemId);
+                    }
+                    else
+                    {
                         resident.RemoveDebtItem(item.PaymentItemId);
                         resident.RemoveDiscount(item.PaymentItemId);
                     }
-                    
                 }
 
-                if (item.Discount > 0) resident.AddDiscount(item.PaymentItemId, item.Discount, item.Description);
+                if (item.Discount > 0 && item.IsCheckid) resident.AddDiscount(item.PaymentItemId, item.Discount, item.Description);
                 else resident.RemoveDiscount(item.PaymentItemId);
             }
 
