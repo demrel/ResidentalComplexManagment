@@ -1,6 +1,8 @@
-﻿using ResidentalComplexManagment.Application.Interface;
+﻿using ResidentalComplexManagment.Application.Filters;
+using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Application.Specifications;
+using ResidentalComplexManagment.Application.Specifications.Buildings;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 
 
@@ -43,11 +45,16 @@ namespace ResidentalComplexManagment.Application.Services
         public async Task<List<BuildingDTO>> GetList() =>
           await _repository.ListAsync(new Buildingpecifiaction());
 
+        public async Task<List<BuildingDTO>> GetList(string search) =>
+         await _repository.ListAsync(new Buildingpecifiaction());
 
-        public async Task<List<BuildingDTO>> GetList(string id)
+
+        public async Task<PaginationList<BuildingDTO>> GetList(string id,string search,int currentPage,int pageItemSize)
         {
             var user = await _userService.GetById(id);
-            return await _repository.ListAsync(new Buildingpecifiaction(user?.MktId));
+            var totalCount = await _repository.CountAsync(new BuildingCountByTotalPageSpec(user?.MktId, search));
+            var data= await _repository.ListAsync(new Buildingpecifiaction(user?.MktId, search, currentPage, pageItemSize));
+            return new PaginationList<BuildingDTO>(data,totalCount,currentPage,pageItemSize);
         }
 
         public async Task<BuildingDTO> GetById(string id) =>

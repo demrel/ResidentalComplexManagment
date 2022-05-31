@@ -24,25 +24,27 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
             _currentUserService = currentUserService;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string search="",int page=1,int size=30)
         {
             string userId = _currentUserService.GetNonAdminUserId;
-            var buildings = await _buildingService.GetList(userId);
+            var buildings = await _buildingService.GetList(userId,search,page, size);
             var model = new BuildingIndexVM()
             {
                 Buildings = buildings,
+                FilterParameter =search,
             };
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add(string mtkId)
+        public async Task<IActionResult> Add(string id)
         {
             string userId = _currentUserService.GetNonAdminUserId;
             var mtkList = await _mtkService.GetSelectList(userId);
             BuildingAddVM buildingAddVM = new()
             {
-                Mkt = new SelectList(mtkList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), mtkId)
+                Mkt = new SelectList(mtkList, nameof(SelectListItemDto.Id), nameof(SelectListItemDto.Name), id)
             };
             return View(buildingAddVM);
         }

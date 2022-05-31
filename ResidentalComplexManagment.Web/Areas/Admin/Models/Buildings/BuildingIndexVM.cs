@@ -1,13 +1,12 @@
-﻿using ResidentalComplexManagment.Application.Models;
+﻿using ResidentalComplexManagment.Application.Filters;
+using ResidentalComplexManagment.Application.Models;
 
 namespace ResidentalComplexManagment.Web.Areas.Admin.Models
 {
     public class BuildingIndexVM
     {
-        public List<BuildingDTO> Buildings { get; set; }
-        public BuildingIndexVM()
-        {
-            Buildings = new ();
-        }
+        public PaginationList<BuildingDTO> Buildings { get; set; }
+        public string FilterParameter { get; set; }
+        
     }
 }

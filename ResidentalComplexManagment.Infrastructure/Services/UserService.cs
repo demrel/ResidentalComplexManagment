@@ -98,7 +98,6 @@ namespace ResidentalComplexManagment.Infrastructure.Services
                 await _userManager.RemoveFromRoleAsync(user, userLastRole);
                 await _userManager.AddToRoleAsync(user, userDTO.Role);
             }
-
         }
     }
 

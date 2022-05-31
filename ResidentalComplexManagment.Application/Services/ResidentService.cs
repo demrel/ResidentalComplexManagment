@@ -124,7 +124,6 @@ namespace ResidentalComplexManagment.Application.Services
                 if (item.Discount > 0 && item.IsCheckid) resident.AddDiscount(item.PaymentItemId, item.Discount, item.Description);
                 else resident.RemoveDiscount(item.PaymentItemId);
             }
-
             await _residentRepository.SaveChangesAsync();
         }
     }
