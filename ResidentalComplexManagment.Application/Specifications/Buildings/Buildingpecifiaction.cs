@@ -13,6 +13,7 @@ namespace ResidentalComplexManagment.Application.Specifications
     {
         public Buildingpecifiaction(string filter = "")
         {
+            filter=filter.Trim().ToLower();
             Query.Select(x => new BuildingDTO
             {
                 Id = x.Id,
@@ -22,9 +23,9 @@ namespace ResidentalComplexManagment.Application.Specifications
                 MKTName = x.MKT.Name,
                 Number = x.Number,
 
-            }).Search(x => x.Name, $"%{filter}%")
-              .Search(x => x.Address, $"%{filter}%")
-              .Search(x => x.MKT.Name, $"%{filter}%")
+            }).Search(x => x.Name.ToLower(), $"%{filter}%")
+              .Search(x => x.Address.ToLower(), $"%{filter}%")
+              .Search(x => x.MKT.Name.ToLower(), $"%{filter}%")
               .Search(x => x.Number.ToString(), $"%{filter}%")
               .AsNoTracking();
 
@@ -32,6 +33,8 @@ namespace ResidentalComplexManagment.Application.Specifications
 
         public Buildingpecifiaction(string mtkId, string filter = "",int currentPage=1,int pageItemSize=30)
         {
+            filter = filter.Trim().ToLower();
+
             Query.Select(x => new BuildingDTO
             {
                 Id = x.Id,
@@ -50,10 +53,10 @@ namespace ResidentalComplexManagment.Application.Specifications
 
             if (!string.IsNullOrEmpty(filter))
             {
-                Query.Search(x => x.Name, $"%{filter}%")
-                     .Search(x => x.Address, $"%{filter}%")
-                     .Search(x => x.MKT.Name, $"%{filter}%")
-                     .Search(x => x.Number.ToString(), $"%{filter}%");
+                Query.Search(x => x.Name.ToLower(), $"%{filter}%")
+                     .Search(x => x.Address.ToLower(), $"%{filter}%")
+                     .Search(x => x.MKT.Name.ToLower(), $"%{filter}%")
+                     .Search(x => x.Number.ToString().ToLower(), $"%{filter}%");
             }
             Query.Skip(pageItemSize*(currentPage-1)).Take(pageItemSize).AsNoTracking();
         }

@@ -11,8 +11,10 @@ namespace ResidentalComplexManagment.Application.Specifications
 {
     public  class AppartmentSpecifiaction : Specification<Appartment, AppartmentDTO>
     {
-        public AppartmentSpecifiaction()
+        public AppartmentSpecifiaction(string filter = "", int currentPage = 1, int pageItemSize = 30)
         {
+            filter = filter.Trim().ToLower();
+
             Query.Select(x => new AppartmentDTO
             {
                Id= x.Id,
@@ -21,14 +23,23 @@ namespace ResidentalComplexManagment.Application.Specifications
                Area=x.Area,
                MtkName=x.Building.MKT.Name,
                BuildingName=x.Building.Name,
-            
 
             });
-              
+            if (!string.IsNullOrEmpty(filter))
+            {
+                Query.Search(x => x.DoorNumber.ToString().ToLower(), $"%{filter}%")
+                     .Search(x => x.Area.ToString().ToLower(), $"%{filter}%")
+                     .Search(x => x.Building.MKT.Name.ToLower(), $"%{filter}%")
+                     .Search(x => x.Building.Name.ToString().ToLower(), $"%{filter}%");
+            }
+            Query.Skip(pageItemSize * (currentPage - 1)).Take(pageItemSize).AsNoTracking();
+
         }
 
-        public AppartmentSpecifiaction(string id)
+        public AppartmentSpecifiaction(string id, string filter = "", int currentPage = 1, int pageItemSize = 30)
         {
+            filter = filter.Trim().ToLower();
+
             Query.Select(x => new AppartmentDTO
             {
                 Id = x.Id,
@@ -41,6 +52,13 @@ namespace ResidentalComplexManagment.Application.Specifications
                 MtkId = x.Building.MKT.Id,
 
             }).Where(c => c.BuildingId == id);
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                Query.Search(x => x.DoorNumber.ToString().ToLower(), $"%{filter}%")
+                     .Search(x => x.Area.ToString().ToLower(), $"%{filter}%");
+            }
+            Query.Skip(pageItemSize * (currentPage - 1)).Take(pageItemSize).AsNoTracking();
 
         }
 

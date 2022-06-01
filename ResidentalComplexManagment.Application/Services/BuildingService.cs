@@ -49,12 +49,12 @@ namespace ResidentalComplexManagment.Application.Services
          await _repository.ListAsync(new Buildingpecifiaction());
 
 
-        public async Task<PaginationList<BuildingDTO>> GetList(string id,string search,int currentPage,int pageItemSize)
+        public async Task<PaginationList<BuildingDTO>> GetList(string id, string search, int currentPage, int pageItemSize)
         {
             var user = await _userService.GetById(id);
-            var totalCount = await _repository.CountAsync(new BuildingCountByTotalPageSpec(user?.MktId, search));
-            var data= await _repository.ListAsync(new Buildingpecifiaction(user?.MktId, search, currentPage, pageItemSize));
-            return new PaginationList<BuildingDTO>(data,totalCount,currentPage,pageItemSize);
+            var totalCount = await _repository.CountAsync(new BuildingCountByFilterSpec(user?.MktId, search));
+            var data = await _repository.ListAsync(new Buildingpecifiaction(user?.MktId, search, currentPage, pageItemSize));
+            return new PaginationList<BuildingDTO>(data, totalCount, currentPage, pageItemSize);
         }
 
         public async Task<BuildingDTO> GetById(string id) =>
@@ -65,8 +65,13 @@ namespace ResidentalComplexManagment.Application.Services
         public async Task<List<SelectListItemDto>> GetSelectList(string mtkId) =>
               await _repository.ListAsync(new BuildingSelectListSpecifiaction(mtkId));
 
-        public async Task<List<BuildingDTO>> GetBuildingsByMtk(string mtkId) =>
-             await _repository.ListAsync(new Buildingpecifiaction(mtkId));
+        public async Task<PaginationList<BuildingDTO>> GetBuildingsByMtk(string mtkId, string search, int currentPage, int pageItemSize)
+        {
+            var totalCount = await _repository.CountAsync(new BuildingCountByFilterSpec(mtkId, search));
+            var data = await _repository.ListAsync(new Buildingpecifiaction(mtkId, search, currentPage, pageItemSize));
+            return new PaginationList<BuildingDTO>(data, totalCount, currentPage, pageItemSize);
+        }
+
 
 
     }

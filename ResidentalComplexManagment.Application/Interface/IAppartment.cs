@@ -1,4 +1,5 @@
-﻿using ResidentalComplexManagment.Application.Models;
+﻿using ResidentalComplexManagment.Application.Filters;
+using ResidentalComplexManagment.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace ResidentalComplexManagment.Application.Interface;
 public interface IAppartment : IBase<AppartmentDTO> 
 {
     Task<List<SelectListItemDto>> GetSelectList(string buildingId);
-    Task<List<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId);
-    Task<List<AppartmentDTO>> GetList(string userId);
+    Task<PaginationList<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId, string search, int currentPage, int pageItemSize);
+    Task<PaginationList<AppartmentDTO>> GetList(string userId, string search, int currentPage, int pageItemSize);
 }

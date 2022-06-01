@@ -26,13 +26,14 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
             _currentUserService = currentUserService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search = "", int page = 1, int size = 30)
         {
             string userId = _currentUserService.GetNonAdminUserId;
-            var appartments = await _appartmentService.GetList(userId);
+            var appartments = await _appartmentService.GetList(userId, search, page, size);
             var model = new AppartmentIndexVM()
             {
                 Appartments = appartments,
+                FilterParameter = search,
             };
             return View(model);
         }

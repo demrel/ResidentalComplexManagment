@@ -35,15 +35,16 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id,string search="", int page = 1, int size = 30)
         {
             var mtk=  await _mtkService.GetById(id);
             if (mtk == null) return NotFound();         
-            var buildings = await _buildingServie.GetBuildingsByMtk(id);
+            var buildings = await _buildingServie.GetBuildingsByMtk(id, search, page, size);
             var model = new MtkGetVM()
             {
                 Buildings = buildings,
-                MTK = mtk
+                MTK = mtk,
+                FilterParameter =search,
             };
             return View(model);
         }

@@ -1,6 +1,8 @@
-﻿using ResidentalComplexManagment.Application.Interface;
+﻿using ResidentalComplexManagment.Application.Filters;
+using ResidentalComplexManagment.Application.Interface;
 using ResidentalComplexManagment.Application.Models;
 using ResidentalComplexManagment.Application.Specifications;
+using ResidentalComplexManagment.Application.Specifications.Appartments;
 using ResidentalComplexManagment.Core.Entities.ComplexInfrastructure;
 using ResidentalComplexManagment.Core.Entities.Users;
 using System;
@@ -45,17 +47,26 @@ namespace ResidentalComplexManagment.Application.Services
 
 
 
-        public async Task<List<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId) =>
-       await _repository.ListAsync(new AppartmentSpecifiaction(buildingId));
+        public async Task<PaginationList<AppartmentDTO>> GetAppartmentsByBuilding(string buildingId, string search, int currentPage, int pageItemSize)
+        {
+            var totalCount = await _repository.CountAsync(new AppartmenrtCountByBuildingFilterSpec(buildingId, search));
+            var data = await _repository.ListAsync(new AppartmentSpecifiaction(buildingId, search, currentPage, pageItemSize));
+            return new PaginationList<AppartmentDTO>(data, totalCount, currentPage, pageItemSize);
+
+        }
+
 
         public async Task<List<AppartmentDTO>> GetList() =>
           await _repository.ListAsync(new AppartmentSpecifiaction());
 
-        public async Task<List<AppartmentDTO>> GetList(string userId)
+        public async Task<PaginationList<AppartmentDTO>> GetList(string userId, string search, int currentPage, int pageItemSize)
         {
             var user = await _userService.GetById(userId);
-           return  await _repository.ListAsync(new AppartmentListByMtkSpec(user?.MktId));
+            var totalCount = await _repository.CountAsync(new AppartmenrtCountByMtkFilterSpec(user?.MktId, search));
+            var data = await _repository.ListAsync(new AppartmentListByMtkSpec(user?.MktId,  search,  currentPage,  pageItemSize));
+            return new PaginationList<AppartmentDTO>(data, totalCount, currentPage, pageItemSize);
         }
+
         public async Task<AppartmentDTO> GetById(string Id) =>
              await _repository.GetBySpecAsync(new IncludeALlParamsToAppartment(Id));
 

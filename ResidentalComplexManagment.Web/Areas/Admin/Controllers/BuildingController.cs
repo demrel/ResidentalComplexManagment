@@ -50,17 +50,18 @@ namespace ResidentalComplexManagment.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id, string search = "", int page = 1, int size = 30)
         {
 
             var building = await _buildingService.GetById(id);
             if (building == null) return NotFound();
 
-            var appartments = await _appartmentService.GetAppartmentsByBuilding(id);
+            var appartments = await _appartmentService.GetAppartmentsByBuilding(id, search, page, size);
             var model = new BuildingGetVM()
             {
                 Building = building,
-                Appartments = appartments
+                Appartments = appartments,
+                FilterParameter=search,
             };
             return View(model);
         }

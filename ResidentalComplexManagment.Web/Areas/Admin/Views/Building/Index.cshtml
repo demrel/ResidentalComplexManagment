@@ -14,17 +14,18 @@
 <div class="card px-4 shadowBox border-0 table-responsive border-radius-card">
     <div class="row align-items-center ">
         <div class="col-lg-6">
-            <h5 class="my-4 float-lg-left">@ViewData["Title"]</h5>
+            <h5 class="my-4 float-lg-left"> @ViewData["Title"] </h5>
         </div>
         <div class="col-lg-6">
             <form asp-action="Index" asp-controller="Building" method="get">
                 <div class="float-lg-right d-lg-flex  align-items-center">
-
+                     <a href="/admin/building" class="btn w-20 text-left  mr-1 mb-3 mb-lg-0 border colorSecondary">
+                        <i class="fas fa-times colorSecondary fa-lg "></i> 
+                    </a>
                     <input name="search" type="text" class="form-control w-100 colorSecondary mr-3" placeholder="Axtarış" value="@Model.FilterParameter" />
-                    <button type="submit" class="btn w-50 text-left  mb-3 mb-lg-0 border colorSecondary">
+                    <button type="submit" class="btn w-50 text-left   mt-lg-0 border colorSecondary">
                         <i class="fas fa-search colorSecondary fa-lg mr-2"></i> Axtar
                     </button>
-
                 </div>
             </form>
         </div>

@@ -60,15 +60,19 @@
         <div class="col-lg-6">
             <h5 class="my-4 float-lg-left">@ViewData["Title"]</h5>
         </div>
-      @*  <div class="col-lg-6">
-            <div class="float-lg-right d-lg-flex  align-items-center">
-                <button type="button" class="btn w-100 text-left mr-3 mb-3 mb-lg-0 border colorSecondary">
-                    <i class="fas fa-file-download colorSecondary fa-lg mr-2"></i> Hesabat yarat
-                </button>
-                <input type="text" class="form-control w-100 colorSecondary" placeholder="Axtarış" />
-            </div>
-
-        </div>*@
+     <div class="col-lg-6">
+            <form asp-action="Get" asp-controller="MKT" asp-route-id="@Model.MTK.Id" method="get">
+                <div class="float-lg-right d-lg-flex  align-items-center">
+                     <a href="/admin/mkt/get/@Model.MTK.Id" class="btn w-20 text-left  mr-1 mb-3 mb-lg-0 border colorSecondary">
+                        <i class="fas fa-times colorSecondary fa-lg "></i> 
+                    </a>
+                    <input name="search" type="text" class="form-control w-100 colorSecondary mr-3" placeholder="Axtarış" value="@Model.FilterParameter" />
+                    <button type="submit" class="btn w-50 text-left  mb-3 mt-lg-0 border colorSecondary">
+                        <i class="fas fa-search colorSecondary fa-lg mr-2"></i> Axtar
+                    </button>
+                </div>
+            </form>
+        </div>
         <div class="clearfix"></div>
     </div>
     <table class="table w-100 table-borderless mt-4 mt-lg-0">
@@ -81,7 +85,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in @Model.Buildings)
+            @foreach (var item in @Model.Buildings.List)
             {
                 <tr>
                     <td class="pl-4" data-label="Şərti ad">@item.Name</td>
@@ -100,23 +104,50 @@
         </tbody>
     </table>
 
-  @*  <nav class="mt-4">
+  <nav class="mt-4">
         <ul class="pagination ">
-            <li class="page-item ">
-                <a class="page-link border-0" href="#" aria-label="Previous">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-            </li>
-            <li class="page-item active "><a class="page-link border-radius-card " href="#">1</a></li>
-            <li class="page-item"><a class="page-link border-0" href="#">2</a></li>
-            <li class="page-item"><a class="page-link border-0" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link border-0" href="#" aria-label="Next">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            </li>
+            @if (Model.Buildings.TotalPages > 0)
+            {
+                @if (Model.Buildings.CurrentPage > 1)
+                {
+                    <li class="page-item ">
+                        <a class="page-link border-0" aria-label="Previous" asp-action="Get" asp-controller="mkt"  
+                        asp-route-id="@Model.MTK.Id"
+                        asp-route-page="@(Model.Buildings.CurrentPage-1)" 
+                        asp-route-size="@Model.Buildings.PageSize" 
+                        asp-route-search="@Model.FilterParameter" >
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = Model.Buildings.StartPage; i <= Model.Buildings.EndPage; i++)
+                {
+                    <li class="page-item @(i==Model.Buildings.CurrentPage?"active":"")">
+                        <a class="page-link border-radius-card mx-1" asp-action="Get" asp-controller="mkt"  
+                        asp-route-id="@Model.MTK.Id"
+                        asp-route-page="@i"
+                        asp-route-search="@Model.FilterParameter" 
+                        asp-route-size="@Model.Buildings.PageSize">@i</a>
+                    </li>
+                }
+
+
+                @if (Model.Buildings.CurrentPage < Model.Buildings.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link border-0" aria-label="Next" asp-action="Get" asp-controller="mkt"  
+                        asp-route-id="@Model.MTK.Id"
+                        asp-route-page="@(Model.Buildings.CurrentPage+1)" 
+                        asp-route-size="@Model.Buildings.PageSize" 
+                        asp-route-search="@Model.FilterParameter" >
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                }
+            }
         </ul>
-    </nav>*@
+    </nav>
 </div>
 
 @section Script{
